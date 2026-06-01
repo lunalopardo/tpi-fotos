@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "db:init": "node ./models/config.js --init",
     "dev": "node --watch app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,6 +15,7 @@
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "pg": "^8.21.0",
     "pug": "^3.0.4"
   }
 }

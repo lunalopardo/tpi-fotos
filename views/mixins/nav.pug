@@ -1,0 +1,20 @@
+mixin item(path, name, active)
+    li
+        if active
+            a(href=path class='active') #{name}
+        else 
+            a(href=path) #{name}
+
+mixin nav
+    nav
+        .nav-brand
+            span Fotaza 2
+
+        .nav-search
+            form(action="/publicacion/buscar" method="GET")
+                input(type="text" name="q" placeholder="Buscar fotos, etiquetas...")
+                button(type="submit") Buscar
+
+        ul.nav-menu
+            +item('/', 'Home', currentPath == '/')
+            +item('/publicacion', 'Publicaciones', currentPath.startsWith('/publicacion'))
