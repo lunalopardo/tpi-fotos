@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import './models/config.js'; 
+import indexRouter from './routes/index.js'
+//import usuarioRouter from './routes/usuario.js'
 
 dotenv.config();
 
@@ -25,11 +27,9 @@ app.use((req, res, next)=>{
   next()
 })
 
-
-// provisional -> mover a routers
-app.get('/', (req,res) =>{
-    res.render('index', {titulo: 'Bienvenido a nuestra website!'})
-});
+//app.use('/publicacion', publicacionRouter);
+//app.use('/usuario', usuarioRouter);
+app.use('/', indexRouter);
 
 
 // Levantamos el servidor
