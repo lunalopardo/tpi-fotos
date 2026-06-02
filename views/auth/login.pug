@@ -1,34 +1,42 @@
-extends ../layout
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Iniciar Sesión - Fotaza 2
+    link(rel="stylesheet", href="/css/auth.css")
+  body
+    div.auth-wrapper
+      div.auth-header
+        h1.auth-title Iniciar Sesión
+        p.auth-subtitle Ingresá tus credenciales de acceso
 
-block content
-  h1.page-title= titulo
-  p.page-subtitle Ingresá tus credenciales para acceder a tu cuenta.
+      if error
+        div.alert-error
+          p= error
 
-  if error
-    div.alert-error
-      p= error
+      form(action="/auth/login" method="POST")
+        
+        div.form-group
+          label.form-label Correo Electrónico
+          input.form-input(
+            type="email" 
+            name="email" 
+            value=(formValues ? formValues.email : '') 
+            required 
+            placeholder="nombre@correo.com"
+          )
+        
+        div.form-group
+          label.form-label Contraseña
+          input.form-input(
+            type="password" 
+            name="contrasenia" 
+            required 
+            placeholder="••••••••"
+          )
 
-  div.form-container
-    form(action="/auth/login" method="POST")
-      
-      div.form-group
-        label.form-label Correo Electrónico:
-        input.form-input(
-          type="email" 
-          name="email" 
-          value=(formValues ? formValues.email : '') 
-          required
-        )
+        button.btn-auth-submit(type="submit") Iniciar Sesión
 
-      div.form-group
-        label.form-label Contraseña:
-        input.form-input(
-          type="password" 
-          name="contrasenia" 
-          required
-        )
-
-      button.btn-submit(type="submit") Iniciar Sesión
-
-    p.form-footer ¿No tenés cuenta aún? 
-      a(href="/auth/registro") Registrate acá.
+      p.auth-footer ¿No tenés cuenta aún? 
+        a(href="/auth/registro") Registrate acá

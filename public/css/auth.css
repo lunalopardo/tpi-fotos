@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+body {
+    background-color: #12141c;
+    color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.auth-wrapper {
+    background-color: #1a1d26;
+    border: 1px solid #252a37;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+    padding: 40px 30px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+}
+
+.auth-subtitle {
+    font-size: 13px;
+    color: #7f8699;
+}
+
+/* Formularios */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #a0a5b5;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 14px;
+    background-color: #212634;
+    border: 1px solid #2d3448;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.form-input:focus {
+    border-color: #27ae60;
+    background-color: #252a37;
+}
+
+/* Botón copado */
+.btn-auth-submit {
+    width: 100%;
+    padding: 11px;
+    background-color: #27ae60;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    margin-top: 10px;
+}
+
+.btn-auth-submit:hover {
+    background-color: #219653;
+}
+
+/* error zod */
+.alert-error {
+    background-color: rgba(231, 76, 60, 0.1);
+    border-left: 3px solid #e74c3c;
+    color: #f19086;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-bottom: 22px;
+}
+
+/* footer */
+.auth-footer {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 13px;
+    color: #7f8699;
+}
+
+.auth-footer a {
+    color: #27ae60;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}

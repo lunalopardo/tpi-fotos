@@ -1,0 +1,250 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #12141c; /* Fondo oscuro azulado de la maqueta */
+    color: #f0f2f5;
+}
+
+a {
+    color: #2ecc71;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+/*  NAV BAR  */
+.navbar {
+    background-color: #1a1d26;
+    border-bottom: 1px solid #252a37;
+    padding: 12px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-brand {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+/* Barra de búsqueda  */
+.search-container {
+    flex: 0 1 450px;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 16px 8px 36px;
+    background-color: #252a37;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.search-input:focus {
+    border-color: #3b4256;
+    background-color: #2a303f;
+}
+
+.search-container::before {
+    content: "🔍";
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    opacity: 0.5;
+}
+
+/* Menú */
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    list-style: none;
+}
+
+.btn-upload {
+    background-color: #27ae60; /* Verde esmeralda apagado */
+    color: #ffffff;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-upload:hover {
+    background-color: #27ae60;
+    color: #12141c;
+}
+
+.nav-icon-link {
+    font-size: 18px;
+    color: #a0a5b5;
+    padding: 6px;
+    border-radius: 50%;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-icon-link:hover {
+    color: #ffffff;
+    background-color: #252a37;
+}
+
+.btn-login {
+    color: #27ae60;
+    border: 1px solid #27ae60;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 7px 16px;
+    border-radius: 6px;
+}
+
+.btn-login:hover {
+    background-color: #2ecc71;
+    color: #12141c;
+}
+
+.search-container {
+    flex: 0 1 450px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    color: #7f8699;
+    font-size: 18px !important;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 16px 8px 38px;
+    background-color: #212634;
+    border: 1px solid #2d3448;
+    border-radius: 6px;
+    color: #ffffff;
+}
+
+.material-symbols-outlined {
+    font-size: 22px;
+    display: block;
+}
+
+/* Publicaciones home */
+.container {
+    max-width: 1300px;
+    margin: 25px auto;
+    padding: 0 25px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 10px;
+}
+
+/* Tarjetas */
+.photo-card {
+    background-color: #1a1d26;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #252a37;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.photo-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.photo-img-wrapper {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    background-color: #12141c;
+}
+
+.photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photo-info {
+    padding: 14px;
+}
+
+.photo-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 2px;
+}
+
+.photo-author {
+    font-size: 13px;
+    color: #a0a5b5;
+    margin-bottom: 10px;
+}
+
+
+/* Fila de tags  */
+.photo-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.tag-badge {
+    background-color: #252a37;
+    color: #a0a5b5;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 12px;
+}
+
+/* Footer de la tarjeta */
+.photo-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #252a37;
+    padding-top: 10px;
+    font-size: 13px;
+}
+
+.photo-stat-rating {
+    color: #f1c40f;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.photo-copyright-status {
+    color: #a0a5b5;
+    font-size: 11px;
+}

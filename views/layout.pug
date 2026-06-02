@@ -4,15 +4,35 @@ html(lang="es")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Fotaza 2
-    link(rel="stylesheet", href="/styles.css")
+    link(rel="stylesheet", href="/css/styles.css")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200")
   body
     nav.navbar
-      div.navbar-brand FOTAZA 2
-      ul.navbar-menu
-        li
-          a.nav-link(href="/" class=(currentPath === '/' ? 'active' : '')) Inicio
-        li
-          a.nav-link(href="/auth/login" class=(currentPath === '/auth/login' ? 'active' : '')) Iniciar Sesión
+      a.navbar-brand(href="/") Fotaza 2
+      
+      div.search-container
+        span.material-symbols-outlined.search-icon search
+        input.search-input(type="text" placeholder="Buscar fotografías, autores...")
+      
+      ul.navbar-actions
+        if session && session.usuario
+          li
+            a.btn-upload(href="/publicacion/nuevo") Subir Foto
+          li
+            a.nav-icon-link(href="/usuario/notificaciones" title="Notificaciones") 
+              span.material-symbols-outlined notifications
+          li
+            a.nav-icon-link(href="/usuario/favoritos" title="Mis Favoritos") 
+              span.material-symbols-outlined favorite
+          li
+            a.nav-icon-link(href="/usuario/perfil" title="Mi Perfil") 
+              span.material-symbols-outlined account_circle
+          li
+            a.nav-icon-link(href="/auth/logout" title="Cerrar Sesión" style="color: #e74c3c;") 
+              span.material-symbols-outlined logout
+        else
+          li
+            a.btn-login(href="/auth/login") Iniciar Sesión
 
     main.container
       block content

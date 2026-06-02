@@ -22,7 +22,7 @@ const Publicacion = sequelize.define('publicaciones', {
         type: DataTypes.TEXT,
         allowNull: false
     },
-    licencia_copyright: {
+    copyright: {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },

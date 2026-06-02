@@ -1,18 +1,29 @@
 extends layout
 
 block content
-  h1.page-title= titulo
-  p.page-subtitle ¡Bienvenidos a la primera versión del TPI!
-
   div.gallery-grid
     if publicaciones && publicaciones.length > 0
       each foto in publicaciones
         div.photo-card
-          img.photo-img(src=foto.rutas_archivos, alt=foto.titulo)
-          h3.photo-title= foto.titulo
-          p.photo-desc= foto.descripcion
-          
-          if foto.etiquetas
-            p.photo-tags 🏷️ Etiquetas: #{foto.etiquetas}
+          div.photo-img-wrapper
+            img.photo-img(src=foto.rutas_archivos, alt=foto.titulo)
+
+          div.photo-info
+            h3.photo-title= foto.titulo
+            
+            p.photo-author
+              if foto.usuario && foto.usuario.nombre_usuario
+                | @#{foto.usuario.nombre_usuario}
+              else
+                | @fotografo
+
+            div.photo-meta-row
+              if foto.etiquetas
+                each tag in foto.etiquetas.split(',')
+                  span.tag-badge ##{tag.trim()}
+
+            div.photo-card-footer
+              span.photo-stat-rating ⭐ 4.7
+              span.photo-copyright-status Sin Copyright
     else
-      p No hay publicaciones disponibles en este momento.
+      p.page-subtitle No hay publicaciones disponibles en este momento.

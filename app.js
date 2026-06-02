@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import './models/config.js'; 
+import './models/config.js';
 import session from 'express-session';
 import indexRouter from './routes/index.js'
 //import usuarioRouter from './routes/usuario.js'
@@ -22,33 +22,35 @@ app.set('views', './views');
 
 // Middlewares 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('./public'));
-app.use((req, res, next)=>{
-  res.locals.currentPath = req.path;
-  next()
-})
 
 // req.session
 app.use(session({
     secret: 'clave-secreta-super-segura',
     resave: false,
     saveUninitialized: false,
-    cookie: { 
+    cookie: {
         secure: false,
         maxAge: 1000 * 60 * 60 * 24
     }
 }));
 
+app.use((req, res, next) => {
+    res.locals.session = req.session;
+    next();
+});
+
+
 app.use('/', indexRouter);
-app.use('/auth', authRouter);    
+app.use('/auth', authRouter);
 //app.use('/usuario', usuarioRouter);
 
 
 // Levantamos el servidor
 app.listen(PORT, (err) => {
-    if(err){
+    if (err) {
         console.error('Error al iniciar el servidor: ', err)
         return;
-    } else {console.log(`Servidor escuchando en el puerto: ${PORT}`)}
+    } else { console.log(`Servidor escuchando en el puerto: ${PORT}`) }
 })
