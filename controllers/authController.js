@@ -1,5 +1,6 @@
 import Usuario from '../models/usuario.js'
-import {z} from 'zod';
+import { z } from 'zod';
+import { encriptarContrasenia, verificarContrasenia } from '../helpers/hash.js';
 
 // Validaciones con zod
 const loginSchema = z.object({
@@ -15,22 +16,22 @@ const registroSchema = z.object({
 
 
 // GET - Mostrar login
-export const getLogin = (req,res)=>{
-    res.render('auth/login', {titulo: 'Iniciar Sesión'})
+export const getLogin = (req, res) => {
+    res.render('auth/login', { titulo: 'Iniciar Sesión' })
 }
 
 // GET - Mostrar registro
-export const getRegistro = (req,res) =>{
-    res.render('auth/registro', {titulo: 'Registrarse'})
+export const getRegistro = (req, res) => {
+    res.render('auth/registro', { titulo: 'Registrarse' })
 }
 
 // POST - Login
-export const postLogin = async (req,res) =>{
+export const postLogin = async (req, res) => {
     const validacion = loginSchema.safeParse(req.body);
 
-    if (!validacion.success){
+    if (!validacion.success) {
         return res.status(400).render('auth/login', {
-error: validacion.error.issues[0].message,            formValues: req.body
+            error: validacion.error.issues[0].message, formValues: req.body
         });
     }
 
@@ -38,8 +39,9 @@ error: validacion.error.issues[0].message,            formValues: req.body
 
     try {
         const usuario = await Usuario.findOne({ where: { email } });
-        
-        if (!usuario || usuario.contrasenia !== contrasenia) {
+        const esValida = usuario ? await verificarContrasenia(contrasenia, usuario.contrasenia) : false;
+
+        if (!usuario || !esValida) {
             return res.status(400).render('auth/login', {
                 error: 'Usuario o contraseña incorrectos.',
                 formValues: req.body
@@ -56,9 +58,9 @@ error: validacion.error.issues[0].message,            formValues: req.body
 
     } catch (error) {
         console.error('Error en postLogin:', error);
-        return res.status(500).render('auth/login', { 
-            error: 'Hubo un error al iniciar sesión.', 
-            formValues: req.body 
+        return res.status(500).render('auth/login', {
+            error: 'Hubo un error al iniciar sesión.',
+            formValues: req.body
         });
     }
 }
@@ -69,15 +71,16 @@ export const postRegistro = async (req, res) => {
 
     if (!validacion.success) {
         return res.status(400).render('auth/registro', {
-error: validacion.error.issues[0].message,            formValues: req.body
+            error: validacion.error.issues[0].message, formValues: req.body
         });
     }
 
     const { nombre_usuario, email, contrasenia } = validacion.data;
 
     try {
-        await Usuario.create({ nombre_usuario, email, contrasenia });
-        return res.redirect('/auth/login'); 
+        const contraseniaEncriptada = await encriptarContrasenia(contrasenia);
+        await Usuario.create({ nombre_usuario, email, contrasenia:contraseniaEncriptada });
+        return res.redirect('/auth/login');
 
     } catch (error) {
         if (error.name === 'SequelizeUniqueConstraintError') {
@@ -87,9 +90,9 @@ error: validacion.error.issues[0].message,            formValues: req.body
             });
         }
         console.error('Error en postRegistro:', error);
-        return res.status(500).render('auth/registro', { 
-            error: 'Hubo un error al crear la cuenta.', 
-            formValues: req.body 
+        return res.status(500).render('auth/registro', {
+            error: 'Hubo un error al crear la cuenta.',
+            formValues: req.body
         });
     }
 };
