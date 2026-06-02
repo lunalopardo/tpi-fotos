@@ -1,31 +1,23 @@
 import { DataTypes } from 'sequelize';
 import sequelize from './config.js';
 
-const Comentario = sequelize.define('comentarios', {
-    id_comentario: {
+const Valoracion = sequelize.define('valoraciones', {
+    id_usuario: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
     },
     id_publicacion: {
         type: DataTypes.INTEGER,
+        primaryKey: true,
         allowNull: false
     },
-    id_usuario: {
+    puntuacion: {
         type: DataTypes.INTEGER,
         allowNull: false
-    },
-    contenido: {
-        type: DataTypes.TEXT,
-        allowNull: false
-    },
-    fecha_creacion: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
     }
 }, {
     timestamps: false,
     freezeTableName: true
 });
 
-export default Comentario;
+export default Valoracion;

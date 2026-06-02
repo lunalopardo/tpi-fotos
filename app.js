@@ -1,8 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import './models/config.js'; 
+import session from 'express-session';
 import indexRouter from './routes/index.js'
 //import usuarioRouter from './routes/usuario.js'
+import authRouter from './routes/auth.js';
 
 dotenv.config();
 
@@ -18,7 +20,7 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', './views');
 
-// Middlewares básicos
+// Middlewares 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(express.static('./public'));
@@ -27,9 +29,20 @@ app.use((req, res, next)=>{
   next()
 })
 
-//app.use('/publicacion', publicacionRouter);
-//app.use('/usuario', usuarioRouter);
+// req.session
+app.use(session({
+    secret: 'clave-secreta-super-segura',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { 
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24
+    }
+}));
+
 app.use('/', indexRouter);
+app.use('/auth', authRouter);    
+//app.use('/usuario', usuarioRouter);
 
 
 // Levantamos el servidor

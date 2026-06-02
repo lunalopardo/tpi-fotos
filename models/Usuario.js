@@ -29,6 +29,9 @@ const Usuario = sequelize.define('usuarios', {
         type: DataTypes.INTEGER,
         defaultValue: 1
     }
+}, {
+    timestamps: false,
+    freezeTableName: true
 });
 
 export default Usuario;

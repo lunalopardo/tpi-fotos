@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  h1.page-title= titulo
+  p.page-subtitle Completá tus datos para formar parte de la comunidad de fotógrafos.
+
+  if error
+    div.alert-error
+      p= error
+
+  div.form-container
+    form(action="/auth/registro" method="POST")
+      
+      div.form-group
+        label.form-label Nombre de Usuario:
+        input.form-input(type="text" name="nombre_usuario" required)
+
+      div.form-group
+        label.form-label Email Electrónico:
+        input.form-input(type="email" name="email" required)
+
+      div.form-group
+        label.form-label Contraseña:
+        input.form-input(type="password" name="contrasenia" required)
+
+      button.btn-submit(type="submit") Registrarme
+
+    p.form-footer ¿Ya tenés cuenta? 
+      a(href="/auth/login") Login

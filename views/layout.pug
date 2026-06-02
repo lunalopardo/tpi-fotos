@@ -1,21 +1,18 @@
-include mixins/alert
-include mixins/nav
-
 doctype html
-html
-    head
-        meta(charset='UTF-8')
-        meta(name='viewport' content='width=device-width, initial-scale=1.0')
-        title Fotaza 2
-        link(rel='stylesheet' href='/styles.css')
-        block metadata
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Fotaza 2
+    link(rel="stylesheet", href="/styles.css")
+  body
+    nav.navbar
+      div.navbar-brand FOTAZA 2
+      ul.navbar-menu
+        li
+          a.nav-link(href="/" class=(currentPath === '/' ? 'active' : '')) Inicio
+        li
+          a.nav-link(href="/auth/login" class=(currentPath === '/auth/login' ? 'active' : '')) Iniciar Sesión
 
-    body
-        +nav
-
-        main
-            if alert
-                +alert(alert)
-
-            div(style="padding: 20px")
-                block content
+    main.container
+      block content
