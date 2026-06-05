@@ -26,26 +26,39 @@ const publicacionSchema = z.object({
 
 // GET Mostrar una publicación
 export const getUnaPublicacion = async (req, res) => {
-    const { id } = req.params;
-
     try {
-        const publicacionOriginal = await Publicacion.findByPk(id);
+        const { id } = req.params;
+        const publicacionBD = await Publicacion.findByPk(id, {
+            include: [
+                {
+                    model: Usuario,
+                    attributes: ['nombre_usuario']
+                }
+            ]
+        });
 
-        if (!publicacionOriginal) {
+        if (!publicacionBD) {
             return res.status(404).send('Publicación no encontrada');
         }
 
-        const publicacion = publicacionOriginal.toJSON();
-        publicacion.imagenes = publicacion.rutas_archivos.split(',');
+        const fotoPlana = publicacionBD.get({ plain: true })
+
+        if (!fotoPlana.rutas_archivos) {
+            fotoPlana.imagenes = [];
+        } else {
+            fotoPlana.imagenes = fotoPlana.rutas_archivos.match(/data:image\/[^;]+;base64,[^,]+/g) || [];
+        }
 
         res.render('publicacion/detalle', {
-            titulo: 'Detalle de Publicación',
-            publicacion
+            titulo: fotoPlana.titulo,
+            foto: fotoPlana,
+            usuarioSesion: req.session ? req.session.usuario : null
         });
 
+
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Error del servidor');
+        console.error('Error en getUnaPublicacion:', error);
+        res.status(500).send('Error al cargar la info de la publicación');
     }
 }
 
@@ -65,7 +78,7 @@ export const postNuevaPublicacion = async (req, res) => {
 
     let datosImagenes = req.body['imagenesBase64[]'] || req.body.imagenesBase64;
 
-if (!datosImagenes) {
+    if (!datosImagenes) {
         req.body.imagenesBase64 = [];
     } else if (!Array.isArray(datosImagenes)) {
         req.body.imagenesBase64 = [datosImagenes];

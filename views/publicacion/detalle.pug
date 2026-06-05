@@ -1,0 +1,79 @@
+extends ../layout
+
+block styles 
+    link(rel="stylesheet" href="../css/publicacion.css")
+
+block content
+  div.detail-container
+    
+    //- Galería de imágenes
+    div.detail-media-section
+      div.main-image-wrapper
+        if foto.imagenes && foto.imagenes.length > 0
+          img#current-image(src=foto.imagenes[0], alt=foto.titulo)
+        else
+          p Imagen no disponible
+
+      if foto.imagenes && foto.imagenes.length > 1
+        div.thumbnail-gallery
+          each imgUrl, index in foto.imagenes
+            img.thumb-img(src=imgUrl, alt=`Miniatura ${index + 1}`, onclick=`changeImage('${imgUrl}')`)
+
+    //- Datos y acciones
+    div.detail-info-section
+      
+      div.author-row
+        div.pfp-placeholder
+          | #{foto.usuario && foto.usuario.nombre_usuario ? foto.usuario.nombre_usuario.charAt(0).toUpperCase() : 'F'}
+        span.username
+          | @#{foto.usuario && foto.usuario.nombre_usuario ? foto.usuario.nombre_usuario : 'fotografo'}
+
+      div.meta-box
+        h1.detail-title= foto.titulo
+        p.detail-description
+          | #{foto.descripcion || 'Sin descripción disponible.'}
+        
+        div.detail-tags-row
+          if foto.etiquetas
+            each tag in foto.etiquetas.split(',')
+              span.tag-badge ##{tag.trim()}
+
+      div.actions-box
+        button.btn-action.btn-interest
+          span.material-symbols-outlined handshake
+          |  Me interesa
+        div.rating-stars-container
+          each estrella in [1, 2, 3, 4, 5]
+            span.material-symbols-outlined.star-icon(data-value=estrella) star
+        button.btn-action.btn-fav
+          span.material-symbols-outlined favorite
+
+      div.comments-box
+        h3 Comentarios
+        
+        if foto.comentarios_cerrados === 1
+          p.comments-closed-msg El autor cerró los comentarios para esta publicación.
+        else
+          div.add-comment
+            input(type="text" placeholder="Escribe un comentario...")
+            button.btn-send-comment Enviar
+        
+        div.comments-list
+          p.comments-placeholder Próximamente: listado de comentarios reales.
+  script.
+    function changeImage(url) {
+      document.getElementById('current-image').src = url;
+    }
+    document.querySelectorAll('.star-icon').forEach(star => {
+      star.addEventListener('click', function() {
+        const valoracion = this.getAttribute('data-value');
+        
+        document.querySelectorAll('.star-icon').forEach(s => s.classList.remove('selected'));
+
+        this.classList.add('selected');
+        
+        console.log(`El usuario quiere calificar con: ${valoracion} estrellas`);
+      });
+    });
+
+    //estrellas interactivas, ver si hace falta mover
