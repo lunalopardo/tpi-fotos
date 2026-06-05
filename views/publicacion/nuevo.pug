@@ -1,0 +1,63 @@
+extends ../layout
+
+block content
+    div.auth-wrapper(style="max-width: 550px;")
+        div.auth-header
+            h1.auth-title Crear nueva publicación
+            p.auth-subtitle Comparte tus imágenes con la comunidad!
+
+        if error
+            div.alert-error
+                p= error
+
+        form(action="/publicacion/nuevo" method="POST")
+
+            div.form-group
+                label.form-label Seleccionar Imágenes
+                input#img.form-input(
+                    type="file" 
+                    accept="image/*" 
+                    multiple 
+                    required
+                    style="padding: 8px;"
+                )
+
+            div#imgsBase64
+
+            div.form-group
+                label.form-label Título de la Publicación
+                input.form-input(
+                    type="text" 
+                    name="titulo" 
+                    value=(formValues ? formValues.titulo : '') 
+                    required 
+                    placeholder="Ej: Atardecer en Merlo"
+                )
+
+            div.form-group
+                label.form-label Descripción (Opcional)
+                textarea.form-input(
+                    name="descripcion" 
+                    rows="3" 
+                    placeholder="Cuéntanos un poco sobre esta foto.."
+                    style="resize: none; font-family: inherit;"
+                )= (formValues ? formValues.descripcion : '')
+
+            div.form-group
+                label.form-label Licencia de Copyright
+                select.form-input(name="copyright" required)
+                    option(value="0" selected=(formValues && formValues.copyright === '0')) Sin Copyright (Uso Libre)
+                    option(value="1" selected=(formValues && formValues.copyright === '1')) Con Copyright (Protegida)
+
+            div.form-group
+                label.form-label Etiquetas (Separadas por comas)
+                input.form-input(
+                    type="text" 
+                    name="etiquetas" 
+                    value=(formValues ? formValues.etiquetas : '') 
+                    placeholder="Ej: paisajes, naturaleza, argentina"
+                )
+
+            button.btn-auth-submit(type="submit") Publicar Fotografía
+
+    script(src="/js/publicacion.js")

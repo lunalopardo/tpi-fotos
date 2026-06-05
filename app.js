@@ -5,6 +5,7 @@ import session from 'express-session';
 import indexRouter from './routes/index.js'
 //import usuarioRouter from './routes/usuario.js'
 import authRouter from './routes/auth.js';
+import publicacionRouter from './routes/publicacion.js'
 
 dotenv.config();
 
@@ -20,9 +21,9 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', './views');
 
-// Middlewares 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Middlewares
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.static('./public'));
 
 // req.session
@@ -44,6 +45,7 @@ app.use((req, res, next) => {
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/publicacion', publicacionRouter);
 //app.use('/usuario', usuarioRouter);
 
 

@@ -5,8 +5,15 @@ block content
     if publicaciones && publicaciones.length > 0
       each foto in publicaciones
         div.photo-card
-          div.photo-img-wrapper
-            img.photo-img(src=foto.rutas_archivos, alt=foto.titulo)
+          div.photo-img-wrapper(style="position: relative;")
+            if foto.imagenes && foto.imagenes.length > 0
+              img.photo-img(src=foto.imagenes[0], alt=foto.titulo)
+            else
+              div(style="padding: 40px 20px; text-align: center; background: #1a1d24; color: #a0aec0; border-radius: 8px;") Imagen no disponible
+
+            if foto.imagenes && foto.imagenes.length > 1
+              div.gallery-badge
+                <span>+#{foto.imagenes.length - 1}</span>
 
           div.photo-info
             h3.photo-title= foto.titulo
@@ -17,13 +24,10 @@ block content
               else
                 | @fotografo
 
-            div.photo-meta-row
-              if foto.etiquetas
-                each tag in foto.etiquetas.split(',')
-                  span.tag-badge ##{tag.trim()}
-
             div.photo-card-footer
-              span.photo-stat-rating ⭐ 4.7
-              span.photo-copyright-status Sin Copyright
+              if foto.copyright === 1
+                span.photo-copyright-status Con Copyright
+              else
+                span.photo-copyright-status Sin Copyright
     else
       p.page-subtitle No hay publicaciones disponibles en este momento.
