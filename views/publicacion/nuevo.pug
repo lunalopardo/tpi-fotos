@@ -44,19 +44,39 @@ block content
                 )= (formValues ? formValues.descripcion : '')
 
             div.form-group
-                label.form-label Licencia de Copyright
-                select.form-input(name="copyright" required)
-                    option(value="0" selected=(formValues && formValues.copyright === '0')) Sin Copyright (Uso Libre)
-                    option(value="1" selected=(formValues && formValues.copyright === '1')) Con Copyright (Protegida)
-
-            div.form-group
-                label.form-label Etiquetas (Separadas por comas)
+                label.form-label Flores / Etiquetas (Separadas por comas)
                 input.form-input(
                     type="text" 
                     name="etiquetas" 
                     value=(formValues ? formValues.etiquetas : '') 
                     placeholder="Ej: paisajes, naturaleza, argentina"
                 )
+
+            div.form-group
+                label.form-label Licencia de Copyright
+                select#copyright.form-input(name="copyright" required onchange="toggleWatermark()")
+                    option(value="0" selected=(formValues && formValues.copyright === '0')) Sin Copyright (Uso Libre)
+                    option(value="1" selected=(formValues && formValues.copyright === '1')) Con Copyright (Protegida)
+
+            //- campo oculto, se muestra solo si eligen con Copyright
+            div.form-group#watermark-group(style="display: none;")
+                label.form-label(for="marca_agua_texto") Texto de la marca de agua
+                input.form-input#marca_agua_texto(type="text" name="marca_agua_texto" placeholder="Ej: © Propiedad Intelectual 2026")
+
+            div.form-group.checkbox-group
+                input#permitir_comentarios(type="checkbox" name="permitir_comentarios" checked)
+                label(for="permitir_comentarios") Permitir que otros usuarios dejen comentarios
+            script.
+                function toggleWatermark() {
+                    const copyrightSelect = document.getElementById('copyright');
+                    const watermarkGroup = document.getElementById('watermark-group');
+                    if (copyrightSelect && copyrightSelect.value === '1') {
+                        watermarkGroup.style.display = 'block';
+                    } else if (watermarkGroup) {
+                        watermarkGroup.style.display = 'none';
+                        document.getElementById('marca_agua_texto').value = '';
+                    }
+                }
 
             button.btn-auth-submit(type="submit") Publicar Fotografía
 
