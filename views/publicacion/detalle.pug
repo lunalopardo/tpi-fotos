@@ -1,11 +1,11 @@
 extends ../layout
 
 block styles 
-    link(rel="stylesheet" href="../css/publicacion.css")
+  link(rel="stylesheet" href="../css/publicacion.css")
 
 block content
   div.detail-container
-    
+
     //- Galería de imágenes
     div.detail-media-section
       div.main-image-wrapper
@@ -21,7 +21,7 @@ block content
 
     //- Datos y acciones
     div.detail-info-section
-      
+
       div.author-row
         div.pfp-placeholder
           | #{foto.usuario && foto.usuario.nombre_usuario ? foto.usuario.nombre_usuario.charAt(0).toUpperCase() : 'F'}
@@ -32,7 +32,7 @@ block content
         h1.detail-title= foto.titulo
         p.detail-description
           | #{foto.descripcion || 'Sin descripción disponible.'}
-        
+
         div.detail-tags-row
           if foto.etiquetas
             each tag in foto.etiquetas.split(',')
@@ -50,16 +50,35 @@ block content
 
       div.comments-box
         h3 Comentarios
-        
+
         if foto.comentarios_cerrados === 1
           p.comments-closed-msg El autor cerró los comentarios para esta publicación.
         else
           div.add-comment
-            input(type="text" placeholder="Escribe un comentario...")
-            button.btn-send-comment Enviar
-        
-        div.comments-list
-          p.comments-placeholder Próximamente: listado de comentarios reales.
+            form.add-comment(action=`/publicacion/${foto.id_publicacion || foto.id}/comentario` method="POST")
+              input.add-comment(type="text" name = "contenido" placeholder="Escribe un comentario...")
+              button.btn-send-comment Enviar
+
+          div.comments-list
+          if foto.comentarios && foto.comentarios.length > 0
+            each c in foto.comentarios
+              div.comment-item
+                //- Avatar redondo con la inicial del que comentó, por ahora no hay foto de perfil (IMPLEMENTAR!!)
+                div.comment-avatar
+                  | #{c.usuario && c.usuario.nombre_usuario ? c.usuario.nombre_usuario.charAt(0).toUpperCase() : 'U'}
+                
+                //- Cuerpo del comentario
+                div.comment-body
+                  div.comment-meta
+                    span.comment-author @#{c.usuario ? c.usuario.nombre_usuario : 'anónimo'}
+                  p.comment-text= c.contenido
+                  
+                  //- Fecha de creación del comentario
+                  span.comment-date
+                    - const fecha = new Date(c.fecha_creacion || c.createdAt);
+                    | Comentado el #{fecha.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit' })}
+          else
+            p.comments-placeholder No hay comentarios aún. ¡Sé el primero en comentar!
   script.
     function changeImage(url) {
       document.getElementById('current-image').src = url;
@@ -67,11 +86,11 @@ block content
     document.querySelectorAll('.star-icon').forEach(star => {
       star.addEventListener('click', function() {
         const valoracion = this.getAttribute('data-value');
-        
+
         document.querySelectorAll('.star-icon').forEach(s => s.classList.remove('selected'));
 
         this.classList.add('selected');
-        
+
         console.log(`El usuario quiere calificar con: ${valoracion} estrellas`);
       });
     });

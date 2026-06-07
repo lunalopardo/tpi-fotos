@@ -17,9 +17,9 @@ block content
                   <span>+#{foto.imagenes.length - 1}</span>
 
           div.photo-info
-            h3.photo-title= foto.titulo
+            h3.photo-title
               a(href=`/publicacion/${foto.id_publicacion}` style="color: inherit; text-decoration: none;")= foto.titulo
-            
+
             p.photo-author
               if foto.usuario && foto.usuario.nombre_usuario
                 | @#{foto.usuario.nombre_usuario}

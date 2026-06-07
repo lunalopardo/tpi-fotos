@@ -160,66 +160,121 @@
     font-size: 1.3rem;
 }
 
-/* Comentarios */
+/* ...--- COMENTARIOS ---... */
+
 .comments-box {
     border-top: 1px solid #2d3748;
     padding-top: 16px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
 .comments-box h3 {
     margin: 0;
     font-size: 1.1rem;
-}
-
-.comments-closed-msg {
-    font-size: 0.9rem;
-    color: #e53e3e;
-    font-style: italic;
-    background: rgba(229, 62, 62, 0.1);
-    padding: 8px;
-    border-radius: 6px;
+    color: #e2e8f0;
 }
 
 .add-comment {
     display: flex;
     gap: 8px;
+    width: 100%;
 }
 
 .add-comment input {
     flex: 1;
     background: #2d3748;
     border: 1px solid #4a5568;
-    padding: 8px;
+    padding: 10px 12px;
     border-radius: 6px;
     color: white;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.add-comment input:focus {
+    border-color: #38a169;
 }
 
 .btn-send-comment {
     background: #38a169;
     color: white;
     border: none;
-    padding: 8px 12px;
+    padding: 0 16px;
     border-radius: 6px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s;
 }
 
 .btn-send-comment:hover {
     background: #2f855a;
 }
 
+/*  LISTADO DE COMENTARIOS  */
 .comments-list {
-    max-height: 200px;
+    max-height: 320px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 14px;
+    padding-right: 4px;
+}
+
+/* Cada bloque de comentario */
+.comment-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 6px 0;
+}
+
+/* El círculo del avatar */
+.comment-avatar {
+    width: 34px;
+    height: 34px;
+    background: #4a5568;
+    color: #e2e8f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    border: 1px solid #718096;
+}
+
+/* Contenedor derecho */
+.comment-body {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 100%;
+}
+
+.comment-author {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #cbd5e0;
+}
+
+.comment-text {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #e2e8f0;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+/* Estilo para la fecha */
+.comment-date {
+    font-size: 0.75rem;
+    color: #718096;
+    margin-top: 2px;
 }
 
 .comments-placeholder {
@@ -228,6 +283,7 @@
     font-style: italic;
 }
 
+/* ...--- VALORACIONES ---...*/
 /* Contenedor de estrellas interactivo */
 .rating-stars-container {
     display: flex;

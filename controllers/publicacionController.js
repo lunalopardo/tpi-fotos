@@ -1,8 +1,18 @@
-import Publicacion from "../models/Publicacion.js";
+import Publicacion from "../models/publicacion.js";
 import Usuario from '../models/usuario.js';
+import Comentario from '../models/comentario.js'
 import { Sequelize } from "sequelize";
 import { z } from 'zod';
 import { createCanvas, loadImage } from 'canvas';
+
+Comentario.belongsTo(Publicacion, { foreignKey: 'id_publicacion' });
+Publicacion.hasMany(Comentario, { foreignKey: 'id_publicacion' });
+
+Comentario.belongsTo(Usuario, { foreignKey: 'id_usuario' });
+Usuario.hasMany(Comentario, { foreignKey: 'id_usuario' });
+
+Publicacion.belongsTo(Usuario, { foreignKey: 'id_usuario' });
+Usuario.hasMany(Publicacion, { foreignKey: 'id_usuario' });
 
 function getAuthenticatedUserId(req) {
     const userId = Number(req.session?.usuario?.id);
@@ -27,6 +37,10 @@ const publicacionSchema = z.object({
     permitir_comentarios: z.string().optional()
 })
 
+const comentarioSchema = z.object({
+    contenido: z.string().min(1, 'El comentario no puede estar vacío').trim()
+})
+
 // GET Mostrar una publicación
 export const getUnaPublicacion = async (req, res) => {
     try {
@@ -36,6 +50,10 @@ export const getUnaPublicacion = async (req, res) => {
                 {
                     model: Usuario,
                     attributes: ['nombre_usuario']
+                },
+                {
+                    model: Comentario,
+                    include: [{ model: Usuario, attributes: ['nombre_usuario'] }]
                 }
             ]
         });
@@ -171,4 +189,40 @@ export const postNuevaPublicacion = async (req, res) => {
 
 async function guardarPublicacion(post) {
     await Publicacion.create(post);
+}
+
+// --- COMENTARIOS ----
+
+//POST nuevo comentario
+export const postNuevoComentario = async (req, res) => {
+
+    const { id } = req.params;
+
+    //vemos si hay usuario logueado
+    const idUsuarioAutenticado = getAuthenticatedUserId(req);
+    if (!idUsuarioAutenticado) {
+        return res.status(401).render('auth/login', { error: 'Debes iniciar sesión primero.' })
+    }
+
+    const validacion = comentarioSchema.safeParse(req.body);
+
+    if (!validacion.success) {
+        return res.redirect('/publicacion/' + id);
+    }
+
+    try {
+        const comentarioTexto = validacion.data.contenido;
+        const nuevoComentario = {
+            id_usuario: idUsuarioAutenticado,
+            id_publicacion: id,
+            contenido: comentarioTexto
+        }
+
+        await Comentario.create(nuevoComentario);
+        res.redirect('/publicacion/' + id)
+    } catch (error) {
+        console.error('Error al publicar el comentario: ', error);
+        return res.status(500).render('publicacion' + id)
+
+    }
 }
