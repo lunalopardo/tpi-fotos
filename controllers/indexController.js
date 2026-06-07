@@ -42,7 +42,6 @@ export const renderHome = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error en renderHome:', error);
-        res.status(500).send('Error al cargar el inicio');
+        next(error);
     }
 };

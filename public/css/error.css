@@ -1,0 +1,67 @@
+.error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    padding: 20px;
+}
+
+.error-card {
+    background: #1a1d24;
+    border: 1px solid #2d3748;
+    border-radius: 8px;
+    padding: 40px;
+    max-width: 450px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+
+.error-icon {
+    font-size: 3.5rem;
+    color: #e53e3e;
+    background: rgba(229, 62, 62, 0.1);
+    padding: 12px;
+    border-radius: 50%;
+}
+
+.error-title {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #f7fafc;
+    font-weight: 700;
+}
+
+.error-message {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #a0aec0;
+    line-height: 1.5;
+}
+
+
+.btn-error-back {
+    margin-top: 8px;
+    display: inline-block;
+    background: #38a169;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-error-back:hover {
+    background: #2f855a;
+}
+
+.btn-error-back:active {
+    transform: scale(0.98);
+}

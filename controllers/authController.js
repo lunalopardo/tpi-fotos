@@ -57,11 +57,7 @@ export const postLogin = async (req, res) => {
         return res.redirect('/');
 
     } catch (error) {
-        console.error('Error en postLogin:', error);
-        return res.status(500).render('auth/login', {
-            error: 'Hubo un error al iniciar sesión.',
-            formValues: req.body
-        });
+        next(error);
     }
 }
 
@@ -89,11 +85,7 @@ export const postRegistro = async (req, res) => {
                 formValues: req.body
             });
         }
-        console.error('Error en postRegistro:', error);
-        return res.status(500).render('auth/registro', {
-            error: 'Hubo un error al crear la cuenta.',
-            formValues: req.body
-        });
+        next(error);
     }
 };
 

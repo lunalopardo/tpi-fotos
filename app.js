@@ -6,6 +6,7 @@ import indexRouter from './routes/index.js'
 //import usuarioRouter from './routes/usuario.js'
 import authRouter from './routes/auth.js';
 import publicacionRouter from './routes/publicacion.js'
+import { manejadorErroresGlobal } from './middleware/errorMiddleware.js'
 
 dotenv.config();
 
@@ -48,6 +49,7 @@ app.use('/auth', authRouter);
 app.use('/publicacion', publicacionRouter);
 //app.use('/usuario', usuarioRouter);
 
+app.use(manejadorErroresGlobal); //Manejamos los errores desde un middleware
 
 // Levantamos el servidor
 app.listen(PORT, (err) => {

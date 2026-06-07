@@ -78,8 +78,7 @@ export const getUnaPublicacion = async (req, res) => {
 
 
     } catch (error) {
-        console.error('Error en getUnaPublicacion:', error);
-        res.status(500).send('Error al cargar la info de la publicación');
+        next(error);
     }
 }
 
@@ -178,12 +177,7 @@ export const postNuevaPublicacion = async (req, res) => {
         res.redirect('/')
 
     } catch (error) {
-        console.error('Error al crear la publicacion: ', error);
-        return res.status(500).render('publicacion/nuevo', {
-            titulo: 'Nueva Publicación',
-            error: 'Hubo un problema al guardar la publicación en la BD',
-            formValues: req.body
-        })
+        next(error);
     }
 };
 

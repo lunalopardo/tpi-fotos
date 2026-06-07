@@ -1,0 +1,14 @@
+extends layout
+
+block styles
+  link(rel="stylesheet" href="/css/error.css")
+
+block content
+  div.error-container
+    div.error-card
+      span.material-symbols-outlined.error-icon warning
+      
+      h1.error-title= titulo || 'Hubo un problema'
+      p.error-message= mensaje || 'Algo salió mal de nuestro lado. Por favor, intenta de nuevo.'
+      
+      a.btn-error-back(href="/") Volver al Inicio
