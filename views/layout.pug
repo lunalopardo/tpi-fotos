@@ -11,9 +11,10 @@ html(lang="es")
     nav.navbar
       a.navbar-brand(href="/") Fotaza 2
 
-      div.search-container
+      form.search-container(action="/buscar" method="GET")
         span.material-symbols-outlined.search-icon search
-        input.search-input(type="text" placeholder="Buscar fotografías, autores...")
+        input.search-input(type="text" name="busqueda" placeholder="Buscar publicaciones o usuarios..")
+        button.btn-search-submit(type="submit") Buscar
 
       ul.navbar-actions
         if session && session.usuario

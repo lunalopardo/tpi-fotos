@@ -14,8 +14,8 @@ block content
 
               if foto.imagenes && foto.imagenes.length > 1
                 div.gallery-badge
-                  <span>+#{foto.imagenes.length - 1}</span>
-
+                  span +#{foto.imagenes.length - 1}
+                
           div.photo-info
             h3.photo-title
               a(href=`/publicacion/${foto.id_publicacion}` style="color: inherit; text-decoration: none;")= foto.titulo
@@ -26,7 +26,15 @@ block content
               else
                 | @fotografo
 
-            div.photo-card-footer
+            if foto.etiquetas
+              div.photo-meta-row
+                each tag in foto.etiquetas.split(',')
+                  span.tag-badge ##{tag.trim()}
+
+            div.photo-card-footer            
+              div.photo-stat-rating
+                | ★ 4.0
+
               if foto.copyright === 1
                 span.photo-copyright-status Con Copyright
               else

@@ -1,0 +1,67 @@
+extends ../layout
+
+block styles
+  link(rel="stylesheet" href="/css/busqueda.css")
+
+block content
+  div.search-results-page
+    h2.results-main-title Resultados de búsqueda para: "#{terminoBuscado}"
+
+    //- SECCIÓN 1: Igual al inicio para ver solo las publicaciones
+    section.results-section
+      h3.section-subtitle Publicaciones Encontradas
+      
+      if publicaciones && publicaciones.length > 0
+        div.gallery-grid
+          each foto in publicaciones
+            div.photo-card
+              a(href=`/publicacion/${foto.id_publicacion || foto.id}`)
+                div.photo-img-wrapper(style="position: relative;")
+                  if foto.imagenes && foto.imagenes.length > 0
+                    img.photo-img(src=foto.imagenes[0], alt=foto.titulo)
+                  else
+                    div.no-img(style="padding: 40px 20px; text-align: center; background: #1a1d24; color: #a0aec0; border-radius: 8px;") Imagen no disponible
+
+                  if foto.imagenes && foto.imagenes.length > 1
+                    div.gallery-badge
+                      span +#{foto.imagenes.length - 1}
+
+              div.photo-info
+                h3.photo-title
+                  a(href=`/publicacion/${foto.id_publicacion || foto.id}` style="color: inherit; text-decoration: none;")= foto.titulo
+
+                p.photo-author
+                  if foto.usuario && foto.usuario.nombre_usuario
+                    | @#{foto.usuario.nombre_usuario}
+                  else
+                    | @fotografo
+                
+                if foto.etiquetas
+                    div.photo-meta-row
+                      each tag in foto.etiquetas.split(',')
+                        span.tag-badge ##{tag.trim()}
+
+                div.photo-card-footer            
+                  div.photo-stat-rating
+                    | ★ 4.0
+                  if foto.copyright === 1
+                    span.photo-copyright-status Con Copyright
+                  else
+                    span.photo-copyright-status Sin Copyright
+      else
+        p.no-results-msg No se encontraron publicaciones que coincidan con la búsqueda.
+
+    //- SECCIÓN 2: Para ver usuarios
+    section.results-section
+      h3.section-subtitle Usuarios Encontrados
+      
+      if usuarios && usuarios.length > 0
+        div.users-list-grid
+          each user in usuarios
+            div.user-search-card
+              div.user-search-avatar
+                | #{user.nombre_usuario.charAt(0).toUpperCase()}
+              div.user-search-info
+                span.user-search-name @#{user.nombre_usuario}
+      else
+        p.no-results-msg No se encontraron usuarios con ese nombre.

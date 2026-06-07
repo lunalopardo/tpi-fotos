@@ -5,7 +5,7 @@ import { Sequelize } from 'sequelize';
 Publicacion.belongsTo(Usuario, { foreignKey: 'id_usuario' });
 Usuario.hasMany(Publicacion, { foreignKey: 'id_usuario' });
 
-export const renderHome = async (req, res) => {
+export const renderHome = async (req, res, next) => {
     try {
         const estaLogueado = req.session && req.session.usuario;
         const condicionesFiltro = { estado: 'activa' };

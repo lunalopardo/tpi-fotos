@@ -26,7 +26,7 @@ export const getRegistro = (req, res) => {
 }
 
 // POST - Login
-export const postLogin = async (req, res) => {
+export const postLogin = async (req, res, next) => {
     const validacion = loginSchema.safeParse(req.body);
 
     if (!validacion.success) {
@@ -62,7 +62,7 @@ export const postLogin = async (req, res) => {
 }
 
 // POST - Registro
-export const postRegistro = async (req, res) => {
+export const postRegistro = async (req, res, next) => {
     const validacion = registroSchema.safeParse(req.body);
 
     if (!validacion.success) {

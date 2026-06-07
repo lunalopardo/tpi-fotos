@@ -42,7 +42,7 @@ const comentarioSchema = z.object({
 })
 
 // GET Mostrar una publicación
-export const getUnaPublicacion = async (req, res) => {
+export const getUnaPublicacion = async (req, res, next) => {
     try {
         const { id } = req.params;
         const publicacionBD = await Publicacion.findByPk(id, {
@@ -88,7 +88,7 @@ export const getNuevaPublicacion = (req, res) => {
 }
 
 // POST nueva publicación
-export const postNuevaPublicacion = async (req, res) => {
+export const postNuevaPublicacion = async (req, res, next) => {
 
     //vemos si hay usuario logueado
     const idUsuarioAutenticado = getAuthenticatedUserId(req);
