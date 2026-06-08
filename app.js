@@ -8,8 +8,10 @@ import authRouter from './routes/auth.js';
 import publicacionRouter from './routes/publicacion.js'
 import buscarRouter from './routes/buscar.js'
 import { manejadorErroresGlobal } from './middleware/errorMiddleware.js'
+import { asociarClases } from './models/asociaciones.js';
 
 dotenv.config();
+asociarClases(); //todas las asociaciones de clases juntas.
 
 // Manejo de puerto
 if (!process.env.PORT) {

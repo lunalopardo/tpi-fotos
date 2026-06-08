@@ -33,7 +33,8 @@ block content
 
             div.photo-card-footer            
               div.photo-stat-rating
-                | ★ 4.0
+                span.star-mini(style="font-size: 14px;") ★
+                span.rating-val(style="color: #a0aec0; font-size: 13px; font-weight: 500;") #{foto.promedioFormateado || '0.0'}
 
               if foto.copyright === 1
                 span.photo-copyright-status Con Copyright

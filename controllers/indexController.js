@@ -1,5 +1,6 @@
 import Publicacion from '../models/Publicacion.js';
 import Usuario from '../models/usuario.js';
+import Valoracion from '../models/valoracion.js'
 import { Sequelize } from 'sequelize';
 
 Publicacion.belongsTo(Usuario, { foreignKey: 'id_usuario' });
@@ -24,6 +25,19 @@ export const renderHome = async (req, res, next) => {
             ]
         });
 
+        const promediosDB = await Valoracion.findAll({
+            attributes: [
+                'id_publicacion',
+                [Sequelize.fn('AVG', Sequelize.col('puntuacion')), 'promedioTotal']
+            ],
+            group: ['id_publicacion']
+        });
+
+        const mapaPromedios = {};
+        promediosDB.forEach(p => {
+            mapaPromedios[p.id_publicacion] = p.get('promedioTotal');
+        });
+
         const publicacionesProcesadas = publicacionesDB.map(pub => {
             const fotoPlana = pub.get({ plain: true }); 
             
@@ -32,6 +46,11 @@ export const renderHome = async (req, res, next) => {
             } else {
                 fotoPlana.imagenes = fotoPlana.rutas_archivos.match(/data:image\/[^;]+;base64,[^,]+/g) || [];
             }
+
+            const idDeLaPub = fotoPlana.id_publicacion || fotoPlana.id;
+            const promedioCrudo = mapaPromedios[idDeLaPub];
+            
+            fotoPlana.promedioFormateado = promedioCrudo ? Number(promedioCrudo).toFixed(1) : '0.0';
             
             return fotoPlana;
         });

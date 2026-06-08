@@ -1,18 +1,10 @@
 import Publicacion from "../models/publicacion.js";
 import Usuario from '../models/usuario.js';
-import Comentario from '../models/comentario.js'
+import Comentario from '../models/comentario.js';
+import Valoracion from '../models/valoracion.js';
 import { Sequelize } from "sequelize";
 import { z } from 'zod';
 import { createCanvas, loadImage } from 'canvas';
-
-Comentario.belongsTo(Publicacion, { foreignKey: 'id_publicacion' });
-Publicacion.hasMany(Comentario, { foreignKey: 'id_publicacion' });
-
-Comentario.belongsTo(Usuario, { foreignKey: 'id_usuario' });
-Usuario.hasMany(Comentario, { foreignKey: 'id_usuario' });
-
-Publicacion.belongsTo(Usuario, { foreignKey: 'id_usuario' });
-Usuario.hasMany(Publicacion, { foreignKey: 'id_usuario' });
 
 function getAuthenticatedUserId(req) {
     const userId = Number(req.session?.usuario?.id);
@@ -58,11 +50,18 @@ export const getUnaPublicacion = async (req, res, next) => {
             ]
         });
 
+
         if (!publicacionBD) {
             return res.status(404).send('Publicación no encontrada');
         }
 
+        const promedioData = await Valoracion.findOne({
+            where: { id_publicacion: id },
+            attributes: [[Sequelize.fn('AVG', Sequelize.col('puntuacion')), 'total']]
+        });
+
         const fotoPlana = publicacionBD.get({ plain: true })
+        fotoPlana.promedioFormateado = Number(promedioData.get('total') || 0).toFixed(1); //promedio con 1 decimal
 
         if (!fotoPlana.rutas_archivos) {
             fotoPlana.imagenes = [];
@@ -185,8 +184,7 @@ async function guardarPublicacion(post) {
     await Publicacion.create(post);
 }
 
-// --- COMENTARIOS ----
-
+// COMENTARIOS
 //POST nuevo comentario
 export const postNuevoComentario = async (req, res) => {
 
@@ -220,3 +218,54 @@ export const postNuevoComentario = async (req, res) => {
 
     }
 }
+
+
+// VALORACIONES
+export const valorarPublicacion = async (req, res, next) => {
+    try {
+        const id_publicacion = parseInt(req.params.id, 10);
+        const puntuacion = parseInt(req.body.puntuacion, 10);
+
+        // Control 1: ¿El usuario está logueado en la sesión?
+        const idUsuarioAutenticado = getAuthenticatedUserId(req);
+        if (!idUsuarioAutenticado) {
+            return res.send(`<script>alert("Debe iniciar sesión primero para poder valorar."); window.history.back();</script>`);
+        }
+
+        // Buscamos la publicación para verificar la autoría
+        const publicacion = await Publicacion.findByPk(id_publicacion);
+        if (!publicacion) {
+            return res.status(404).send('La publicación no existe.');
+        }
+
+        // Control 2: Impedir el auto-voto
+        if (publicacion.id_usuario === idUsuarioAutenticado) {
+            return res.send(`<script>alert("No podés votar tus propias publicaciones."); window.history.back();</script>`);
+        }
+
+        // Control 3: Evitar duplicados
+        const yaVoto = await Valoracion.findOne({
+            where: {
+                id_usuario: idUsuarioAutenticado,
+                id_publicacion: id_publicacion
+            }
+        });
+
+        if (yaVoto) {
+            return res.send(`<script>alert("Ya valoraste esta publicación anteriormente."); window.history.back();</script>`);
+        }
+
+        // Si pasó todos los controles, guardamos en la tabla intermedia
+        await Valoracion.create({
+            id_usuario: idUsuarioAutenticado,
+            id_publicacion: id_publicacion,
+            puntuacion: puntuacion
+        });
+
+        // Éxito total: volvemos a la página limpia
+        return res.redirect('/publicacion/' + id_publicacion);
+
+    } catch (error) {
+        next(error);
+    }
+};

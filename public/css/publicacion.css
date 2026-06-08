@@ -160,6 +160,38 @@
     font-size: 1.3rem;
 }
 
+/* Contenedor principal de estrellas */
+.rating-stars-container {
+    display: flex;
+    gap: 8px;
+    margin: 20px 0;
+}
+
+/* Estilo base de la estrella unicode */
+.star-icon {
+    font-size: 32px;
+    color: #4a5568;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.1s ease;
+    user-select: none;
+    outline: none !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    padding-bottom: 5px;
+}
+
+/* Efecto hover */
+.star-icon:hover {
+    color: #718096;
+    transform: scale(1.1);
+}
+
+.star-icon.selected {
+    color: #f1c40f !important;
+}
+
 /* ...--- COMENTARIOS ---... */
 
 .comments-box {

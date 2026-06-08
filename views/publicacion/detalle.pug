@@ -1,4 +1,5 @@
 extends ../layout
+include ../mixins/alert.pug
 
 block styles 
   link(rel="stylesheet" href="../css/publicacion.css")
@@ -41,10 +42,19 @@ block content
       div.actions-box
         button.btn-action.btn-interest
           span.material-symbols-outlined handshake
-          |  Me interesa
-        div.rating-stars-container
-          each estrella in [1, 2, 3, 4, 5]
-            span.material-symbols-outlined.star-icon(data-value=estrella) star
+          |   Me interesa
+
+        form#form-valorar(action=`/publicacion/${foto.id_publicacion || foto.id}/valorar` method="POST")
+          input#puntuacion-input(type="hidden" name="puntuacion" value="")
+          
+          div.rating-stars-container
+            //- está al revés porque tomaba los números de manera inversa.
+            each estrella in [5, 4, 3, 2, 1]
+              span.star-icon(data-value=estrella) ★
+            //- muestra el promedio de valoraciones
+            span.rating-number(style="color: #a0aec0; font-weight: bold; font-size: 18px;") #{foto.promedioFormateado || '0.0'}
+
+
         button.btn-action.btn-fav
           span.material-symbols-outlined favorite
 
@@ -56,14 +66,14 @@ block content
         else
           div.add-comment
             form.add-comment(action=`/publicacion/${foto.id_publicacion || foto.id}/comentario` method="POST")
-              input.add-comment(type="text" name = "contenido" placeholder="Escribe un comentario...")
+              input.add-comment(type="text" name="contenido" placeholder="Escribe un comentario...")
               button.btn-send-comment Enviar
 
           div.comments-list
           if foto.comentarios && foto.comentarios.length > 0
             each c in foto.comentarios
               div.comment-item
-                //- Avatar redondo con la inicial del que comentó, por ahora no hay foto de perfil (IMPLEMENTAR!!)
+                //- Avatar redondo con la inicial del que comentó [eventualmente reemplazar por pfp!]
                 div.comment-avatar
                   | #{c.usuario && c.usuario.nombre_usuario ? c.usuario.nombre_usuario.charAt(0).toUpperCase() : 'U'}
                 
@@ -79,20 +89,34 @@ block content
                     | Comentado el #{fecha.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit' })}
           else
             p.comments-placeholder No hay comentarios aún. ¡Sé el primero en comentar!
+
   script.
     function changeImage(url) {
       document.getElementById('current-image').src = url;
     }
+
     document.querySelectorAll('.star-icon').forEach(star => {
       star.addEventListener('click', function() {
+        // Capturamos el valor de la estrella
         const valoracion = this.getAttribute('data-value');
 
-        document.querySelectorAll('.star-icon').forEach(s => s.classList.remove('selected'));
+        // Lo guardamos en el input oculto 
+        document.getElementById('puntuacion-input').value = valoracion;
 
+        // Pintamos las estrellas
+        document.querySelectorAll('.star-icon').forEach(s => s.classList.remove('selected'));
         this.classList.add('selected');
 
-        console.log(`El usuario quiere calificar con: ${valoracion} estrellas`);
+        // Confirmar voto
+        if (confirmarVoto()) {
+          document.getElementById('form-valorar').submit();
+        }
       });
     });
 
-    //estrellas interactivas, ver si hace falta mover
+    function confirmarVoto() {
+      const puntos = document.getElementById('puntuacion-input').value;
+      if (!puntos) return false;
+      
+      return confirm(`¿Estás seguro de calificar esta imagen con ${puntos} estrellas? Recordá que solo podés votar una vez.`);
+    }

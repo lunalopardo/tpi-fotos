@@ -21,10 +21,6 @@ const Usuario = sequelize.define('usuarios', {
         type: DataTypes.STRING(255),
         allowNull: false
     },
-    rol: {
-        type: DataTypes.STRING(20),
-        defaultValue: 'usuario'
-    },
     activo: {
         type: DataTypes.INTEGER,
         defaultValue: 1
