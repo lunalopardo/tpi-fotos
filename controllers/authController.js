@@ -1,12 +1,13 @@
+import { Op, Sequelize } from 'sequelize';
 import Usuario from '../models/usuario.js'
 import { z } from 'zod';
 import { encriptarContrasenia, verificarContrasenia } from '../helpers/hash.js';
 
 // Validaciones con zod
 const loginSchema = z.object({
-    email: z.string().email('Email inválido').trim(),
+    identificador: z.string().min(1, 'El usuario o email no puede estar vacío').trim(),
     contrasenia: z.string().min(1, 'La contraseña no puede estar vacía').trim()
-})
+});
 
 const registroSchema = z.object({
     nombre_usuario: z.string().min(3, 'El usuario debe tener al menos 3 caracteres').trim(),
@@ -35,10 +36,19 @@ export const postLogin = async (req, res, next) => {
         });
     }
 
-    const { email, contrasenia } = validacion.data;
+    const { identificador, contrasenia } = validacion.data;
+    const identificadorMinuscula = identificador.toLowerCase();
 
     try {
-        const usuario = await Usuario.findOne({ where: { email } });
+        const usuario = await Usuario.findOne({
+            where: {
+                [Op.or]: [
+                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('email')), identificadorMinuscula),
+                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('nombre_usuario')), identificadorMinuscula)
+                ]
+            }
+        });
+
         const esValida = usuario ? await verificarContrasenia(contrasenia, usuario.contrasenia) : false;
 
         if (!usuario || !esValida) {
@@ -51,7 +61,6 @@ export const postLogin = async (req, res, next) => {
         req.session.usuario = {
             id: usuario.id_usuario,
             nombre: usuario.nombre_usuario,
-            rol: usuario.rol
         };
 
         return res.redirect('/');
@@ -74,17 +83,26 @@ export const postRegistro = async (req, res, next) => {
     const { nombre_usuario, email, contrasenia } = validacion.data;
 
     try {
-        const contraseniaEncriptada = await encriptarContrasenia(contrasenia);
-        await Usuario.create({ nombre_usuario, email, contrasenia:contraseniaEncriptada });
-        return res.redirect('/auth/login');
-
-    } catch (error) {
-        if (error.name === 'SequelizeUniqueConstraintError') {
+        const usuarioExistente = await Usuario.findOne({
+            where: {
+                [Op.or]: [
+                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('nombre_usuario')), nombre_usuario.toLowerCase()),
+                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('email')), email.toLowerCase())
+                ]
+            }
+        });
+        if (usuarioExistente) {
             return res.status(400).render('auth/registro', {
-                error: 'El nombre de usuario o email ya están registrados.',
+                error: 'El nombre de usuario o email ya están registrados (no se permiten variaciones de mayúsculas).',
                 formValues: req.body
             });
         }
+
+        const contraseniaEncriptada = await encriptarContrasenia(contrasenia);
+        await Usuario.create({ nombre_usuario, email, contrasenia: contraseniaEncriptada });
+        return res.redirect('/auth/login');
+
+    } catch (error) {
         next(error);
     }
 };

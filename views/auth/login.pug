@@ -18,14 +18,8 @@ html(lang="es")
       form(action="/auth/login" method="POST")
         
         div.form-group
-          label.form-label Correo Electrónico
-          input.form-input(
-            type="email" 
-            name="email" 
-            value=(formValues ? formValues.email : '') 
-            required 
-            placeholder="nombre@correo.com"
-          )
+          label.form-label Usuario o Correo electrónico
+          input#identificador.form-input(type="text" name="identificador" value=(formValues ? formValues.identificador : '') placeholder="nombre_usuario")
         
         div.form-group
           label.form-label Contraseña
