@@ -24,35 +24,34 @@
     font-weight: 600;
     color: #ffffff;
     margin-bottom: 20px;
-    border-bottom: 1px solid #252a37;
+    border-bottom: 1px solid #1e1f22;
     padding-bottom: 10px;
 }
 
 /* Mensaje para consulta vacía */
 .no-results-msg {
-    color: #7f8699;
+    color: #9f9fa9;
     font-size: 14px;
     font-style: italic;
-    background-color: #1a1d26;
+    background-color: #222327;
     padding: 20px;
     border-radius: 8px;
-    border: 1px solid #252a37;
+    border: 1px solid #1e1f22;
     display: inline-block;
-    width: 100%;
+    width: auto;
 }
-
 
 /* Grilla usuarios */
 .users-list-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-    margin-top: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 28px;
+    margin-top: 10px;
 }
 
 .user-search-card {
-    background-color: #1a1d26;
-    border: 1px solid #252a37;
+    background-color: #222327;
+    border: 1px solid #1e1f22;
     border-radius: 10px;
     padding: 16px;
     display: flex;
@@ -63,22 +62,21 @@
 
 .user-search-card:hover {
     transform: translateY(-2px);
-    border-color: #27ae60;
+    border-color: #8c5cf1;
 }
-
 
 .user-search-avatar {
     width: 44px;
     height: 44px;
-    background-color: #252a37;
-    color: #27ae60;
+    background-color: #2a2c33;
+    color: #8c5cf1;
     font-size: 18px;
     font-weight: 700;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #2d3448;
+    border: 1px solid #1e1f22;
     user-select: none;
 }
 
@@ -96,5 +94,31 @@
 }
 
 .user-search-card:hover .user-search-name {
-    color: #2ecc71;
+    color: #8c5cf1;
+}
+
+/* responsive, ponele */
+
+@media (max-width: 1020px) and (min-width: 701px) {
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 24px;
+    }
+}
+
+@media (max-width: 700px) {
+    .search-results-page {
+        padding: 0 16px;
+        margin: 20px auto;
+    }
+
+    .gallery-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+    }
+
+    .users-list-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
 }

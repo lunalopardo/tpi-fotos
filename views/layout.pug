@@ -6,10 +6,12 @@ html(lang="es")
     title Fotaza 2
     link(rel="stylesheet" href="/css/styles.css")
     link(rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200")
+    link(rel="icon" type="image/png" href="/images/F2.png")
 
   body
     nav.navbar
-      a.navbar-brand(href="/") Fotaza 2
+      a.navbar-brand(href="/")
+        img.navbar-logo(src="/images/logo2.png" alt="Fotaza 2 Logo")
 
       form.search-container(action="/buscar" method="GET")
         span.material-symbols-outlined.search-icon search

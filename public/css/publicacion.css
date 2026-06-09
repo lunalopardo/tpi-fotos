@@ -5,7 +5,7 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    color: #f7fafc;
+    color: #f0f2f5;
 }
 
 /* Sección imágenes */
@@ -17,14 +17,14 @@
 }
 
 .main-image-wrapper {
-    background: #1a1d24;
+    background: #222327;
     border-radius: 12px;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 600px;
-    border: 1px solid #2d3748;
+    border: 1px solid #1e1f22;
 }
 
 .main-image-wrapper img {
@@ -47,12 +47,12 @@
     object-fit: cover;
     border-radius: 6px;
     cursor: pointer;
-    border: 2px solid #2d3748;
+    border: 2px solid #1e1f22;
     transition: border-color 0.2s;
 }
 
 .thumb-img:hover {
-    border-color: #63b3ed;
+    border-color: #8c5cf1;
 }
 
 /* Sección de información */
@@ -61,10 +61,10 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    background: #1a1d24;
+    background: #222327;
     padding: 24px;
     border-radius: 12px;
-    border: 1px solid #2d3748;
+    border: 1px solid #1e1f22;
     box-sizing: border-box;
 }
 
@@ -78,13 +78,14 @@
 .pfp-placeholder {
     width: 48px;
     height: 48px;
-    background: #4a5568;
+    background: #2a2c33;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    color: #fff;
+    color: #ffffff;
+    border: 1px solid #1e1f22;
 }
 
 .username {
@@ -100,7 +101,7 @@
 }
 
 .detail-description {
-    color: #cbd5e0;
+    color: #9f9fa9;
     line-height: 1.5;
     margin-bottom: 12px;
 }
@@ -115,7 +116,7 @@
 .actions-box {
     display: flex;
     gap: 12px;
-    border-top: 1px solid #2d3748;
+    border-top: 1px solid #1e1f22;
     padding-top: 16px;
     align-items: center;
 }
@@ -138,64 +139,35 @@
 
 .btn-interest {
     flex: 2;
-    background: #3182ce;
+    background: #8c5cf1;
+    color: #ffffff;
     padding: 0 16px;
+    font-weight: bold;
+    transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .btn-interest:hover {
-    background: #2b6cb0;
+    background: #7546db;
 }
 
 .btn-rate, .btn-fav {
     flex: 1;
     max-width: 65px;
-    background: #2d3748;
+    background: #2a2c33;
+    border: 1px solid #1e1f22;
 }
 
 .btn-rate:hover, .btn-fav:hover {
-    background: #4a5568;
+    background: #1e1f22;
 }
 
 .btn-action .material-symbols-outlined {
     font-size: 1.3rem;
 }
 
-/* Contenedor principal de estrellas */
-.rating-stars-container {
-    display: flex;
-    gap: 8px;
-    margin: 20px 0;
-}
-
-/* Estilo base de la estrella unicode */
-.star-icon {
-    font-size: 32px;
-    color: #4a5568;
-    cursor: pointer;
-    transition: color 0.15s ease, transform 0.1s ease;
-    user-select: none;
-    outline: none !important;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    vertical-align: middle;
-    padding-bottom: 5px;
-}
-
-/* Efecto hover */
-.star-icon:hover {
-    color: #718096;
-    transform: scale(1.1);
-}
-
-.star-icon.selected {
-    color: #f1c40f !important;
-}
-
 /* ...--- COMENTARIOS ---... */
-
 .comments-box {
-    border-top: 1px solid #2d3748;
+    border-top: 1px solid #1e1f22;
     padding-top: 16px;
     display: flex;
     flex-direction: column;
@@ -205,48 +177,58 @@
 .comments-box h3 {
     margin: 0;
     font-size: 1.1rem;
-    color: #e2e8f0;
+    color: #f0f2f5;
 }
 
+/* El formulario de comentarios */
 .add-comment {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     width: 100%;
+    align-items: center;
 }
 
 .add-comment input {
     flex: 1;
-    background: #2d3748;
-    border: 1px solid #4a5568;
-    padding: 10px 12px;
+    background: #2a2c33;
+    border: 1px solid #2d3448;
+    padding: 0 16px;
+    height: 42px;
     border-radius: 6px;
     color: white;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     outline: none;
-    transition: border-color 0.2s;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
 }
 
 .add-comment input:focus {
-    border-color: #38a169;
+    border-color: #8c5cf1;
+    background-color: #1a1b1e;
 }
 
 .btn-send-comment {
-    background: #38a169;
-    color: white;
+    background: #8c5cf1;
+    color: #ffffff;
     border: none;
-    padding: 0 16px;
+    padding: 0 20px;
+    height: 42px;
     border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
     font-size: 0.9rem;
-    transition: background 0.2s;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .btn-send-comment:hover {
-    background: #2f855a;
+    background: #7546db;
 }
 
-/*  LISTADO DE COMENTARIOS  */
+/* LISTADO DE COMENTARIOS   */
 .comments-list {
     max-height: 320px;
     overflow-y: auto;
@@ -268,8 +250,8 @@
 .comment-avatar {
     width: 34px;
     height: 34px;
-    background: #4a5568;
-    color: #e2e8f0;
+    background: #2a2c33;
+    color: #f0f2f5;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -277,7 +259,7 @@
     font-weight: bold;
     font-size: 0.9rem;
     flex-shrink: 0;
-    border: 1px solid #718096;
+    border: 1px solid #1e1f22;
 }
 
 /* Contenedor derecho */
@@ -291,13 +273,13 @@
 .comment-author {
     font-weight: 600;
     font-size: 0.9rem;
-    color: #cbd5e0;
+    color: #ffffff;
 }
 
 .comment-text {
     margin: 0;
     font-size: 0.95rem;
-    color: #e2e8f0;
+    color: #9f9fa9;
     line-height: 1.4;
     word-break: break-word;
 }
@@ -305,38 +287,39 @@
 /* Estilo para la fecha */
 .comment-date {
     font-size: 0.75rem;
-    color: #718096;
+    color: #645f75;
     margin-top: 2px;
 }
 
 .comments-placeholder {
     font-size: 0.9rem;
-    color: #a0aec0;
+    color: #645f75;
     font-style: italic;
 }
 
 /* ...--- VALORACIONES ---...*/
-/* Contenedor de estrellas interactivo */
 .rating-stars-container {
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
     align-items: center;
     gap: 4px;
-    background: #2d3748;
+    background: #2a2c33; /* Fondo de control unificado */
     padding: 0 10px;
     border-radius: 6px;
     height: 44px;
+    border: 1px solid #1e1f22;
 }
 
 .star-icon {
     font-size: 1.5rem;
-    color: #a0aec0;
+    color: #645f75;
     cursor: pointer;
     transition: color 0.2s, transform 0.1s;
+    padding-bottom: 5px;
 }
 
-/* Efecto hover: ilumina la estrella actual y las anteriores */
+/* Ilumina la estrella actual y las anteriores */
 .star-icon:hover,
 .star-icon:hover ~ .star-icon {
     color: #ecc94b;
@@ -346,5 +329,28 @@
 /* Clase para cuando el usuario ya hizo click y seleccionó una nota */
 .star-icon.selected,
 .star-icon.selected ~ .star-icon {
-    color: #f6e05e;
+    color: #f1c40f;
+}
+
+/* responsive */
+@media (max-width: 950px) {
+    .detail-container {
+        flex-direction: column;
+        gap: 16px;
+        padding: 12px;
+    }
+
+    .main-image-wrapper {
+        min-height: auto;
+        height: 50vh;
+    }
+
+    .main-image-wrapper img {
+        max-height: 100%;
+    }
+
+    .detail-info-section {
+        width: 100%;
+        padding: 16px;
+    }
 }
