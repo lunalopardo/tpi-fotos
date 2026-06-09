@@ -6,8 +6,9 @@ import { valorarPublicacion } from '../controllers/publicacionController.js';
 const router = express.Router();
 
 router.get( '/nuevo', protegerRuta, getNuevaPublicacion);
-router.get('/:id', protegerRuta, getUnaPublicacion);
 router.post('/nuevo', protegerRuta, postNuevaPublicacion);
+
+router.get('/:id', getUnaPublicacion);
 
 router.post('/:id/comentario', protegerRuta, postNuevoComentario)
 

@@ -5,14 +5,8 @@ import Valoracion from '../models/valoracion.js';
 import { Sequelize } from "sequelize";
 import { z } from 'zod';
 import { createCanvas, loadImage } from 'canvas';
-
-function getAuthenticatedUserId(req) {
-    const userId = Number(req.session?.usuario?.id);
-    if (!Number.isInteger(userId) || userId <= 0) {
-        return null;
-    }
-    return userId;
-}
+import { getAuthenticatedUserId } from '../helpers/auth.js';
+import { parsearImagenesBase64 } from '../helpers/imagenesHelper.js';
 
 //Validaciones con zod
 const publicacionSchema = z.object({
@@ -55,6 +49,15 @@ export const getUnaPublicacion = async (req, res, next) => {
             return res.status(404).send('Publicación no encontrada');
         }
 
+        //Los mandamos a loguear si escriben el id de una imagen con copyright en la barra de navegación
+        const idUsuarioAutenticado = getAuthenticatedUserId(req);
+
+        if (publicacionBD.copyright === 1 && !idUsuarioAutenticado) {
+            return res.status(401).render('auth/login', { 
+                error: 'Esta publicación está protegida por derechos de autor. Debes iniciar sesión para verla.' 
+            });
+        }
+
         const promedioData = await Valoracion.findOne({
             where: { id_publicacion: id },
             attributes: [[Sequelize.fn('AVG', Sequelize.col('puntuacion')), 'total']]
@@ -66,7 +69,7 @@ export const getUnaPublicacion = async (req, res, next) => {
         if (!fotoPlana.rutas_archivos) {
             fotoPlana.imagenes = [];
         } else {
-            fotoPlana.imagenes = fotoPlana.rutas_archivos.match(/data:image\/[^;]+;base64,[^,]+/g) || [];
+            fotoPlana.imagenes = parsearImagenesBase64(fotoPlana.rutas_archivos);
         }
 
         res.render('publicacion/detalle', {

@@ -2,6 +2,7 @@ import Publicacion from '../models/Publicacion.js';
 import Usuario from '../models/usuario.js';
 import Valoracion from '../models/valoracion.js'
 import { Sequelize } from 'sequelize';
+import { parsearImagenesBase64 } from '../helpers/imagenesHelper.js';
 
 Publicacion.belongsTo(Usuario, { foreignKey: 'id_usuario' });
 Usuario.hasMany(Publicacion, { foreignKey: 'id_usuario' });
@@ -44,7 +45,7 @@ export const renderHome = async (req, res, next) => {
             if (!fotoPlana.rutas_archivos) {
                 fotoPlana.imagenes = [];
             } else {
-                fotoPlana.imagenes = fotoPlana.rutas_archivos.match(/data:image\/[^;]+;base64,[^,]+/g) || [];
+                fotoPlana.imagenes = parsearImagenesBase64(fotoPlana.rutas_archivos);
             }
 
             const idDeLaPub = fotoPlana.id_publicacion || fotoPlana.id;
