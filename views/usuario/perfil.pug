@@ -1,0 +1,56 @@
+extends ../layout 
+
+block styles
+  link(rel="stylesheet" href="/css/perfil.css")
+
+block content
+  .profile-container
+    .profile-header
+      .profile-avatar-wrapper
+        if perfilUsuario && perfilUsuario.nombre_usuario
+          .profile-avatar
+            = perfilUsuario.nombre_usuario.charAt(0).toUpperCase()
+      
+      .profile-info
+        if perfilUsuario
+          h1.profile-username @#{perfilUsuario.nombre_usuario}
+        
+        .profile-stats
+          span #[strong #{stats.publicaciones}] publicaciones
+          span #[strong #{stats.seguidores}] seguidores
+          span #[strong #{stats.seguidos}] seguidos
+
+        //- Filtro de seguridad para el botón Seguir
+        if session && session.usuario && perfilUsuario && session.usuario.id !== perfilUsuario.id_usuario
+          form.profile-actions-form(action=`/usuario/seguir/${perfilUsuario.id_usuario}` method="POST")
+            if yaLoSigue
+              button.btn-unfollow(type="submit") Dejar de seguir
+            else
+              button.btn-follow(type="submit") Seguir
+
+    hr.profile-divider
+
+    h2.profile-section-title Publicaciones
+    
+    //- Reutilizamos la grilla global
+    div.gallery-grid
+      if publicaciones && publicaciones.length > 0
+        each foto in publicaciones
+          div.photo-card
+            a(href=`/publicacion/${foto.id_publicacion}`)
+              div.photo-img-wrapper(style="position: relative;")
+                if foto.imagenes && foto.imagenes.length > 0
+                  img.photo-img(src=foto.imagenes[0], alt=foto.titulo)
+                else
+                  div.photo-img-placeholder Imagen no disponible
+
+                if foto.imagenes && foto.imagenes.length > 1
+                  div.gallery-badge
+                    span +#{foto.imagenes.length - 1}
+                  
+            div.photo-info
+              h3.photo-title
+                a(href=`/publicacion/${foto.id_publicacion}`)= foto.titulo
+              p.photo-author @#{perfilUsuario.nombre_usuario}
+      else
+        p.no-publications Este usuario todavía no tiene publicaciones.

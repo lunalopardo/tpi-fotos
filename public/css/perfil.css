@@ -1,0 +1,130 @@
+.profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profile-header {
+    background: #1a1d24;
+    border-radius: 8px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-bottom: 30px;
+}
+
+.profile-avatar-wrapper {
+    flex-shrink: 0;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    background: #7c4dff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-username {
+    margin: 0;
+    font-size: 26px;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* Publicaciones, seguidores, seguidos */
+.profile-stats {
+    display: flex;
+    gap: 20px;
+    color: #a0aec0;
+    font-size: 15px;
+}
+
+.profile-stats strong {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.profile-actions-form {
+    margin-top: 5px;
+}
+
+.btn-follow,
+.btn-unfollow {
+    border: none;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-follow {
+    background: #7c4dff;
+    color: #ffffff;
+}
+
+.btn-follow:hover {
+    background: #6536ec;
+}
+
+.btn-unfollow {
+    background: #e74c3c;
+    color: #ffffff;
+}
+
+.btn-unfollow:hover {
+    background: #c0392b;
+}
+
+.btn-follow:active,
+.btn-unfollow:active {
+    transform: scale(0.97);
+}
+
+.profile-divider {
+    border: 0;
+    height: 1px;
+    background: #2d3748;
+    margin: 25px 0;
+}
+
+.profile-section-title {
+    font-size: 20px;
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.photo-img-placeholder {
+    padding: 60px 20px;
+    text-align: center;
+    background: #1a1d24;
+    color: #a0aec0;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.no-publications {
+    color: #a0aec0;
+    font-size: 15px;
+    font-style: italic;
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 0;
+}

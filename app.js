@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import './models/config.js';
 import session from 'express-session';
 import indexRouter from './routes/index.js'
-//import usuarioRouter from './routes/usuario.js'
+import usuarioRouter from './routes/usuario.js'
 import authRouter from './routes/auth.js';
 import publicacionRouter from './routes/publicacion.js'
 import buscarRouter from './routes/buscar.js'
@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/publicacion', publicacionRouter);
-//app.use('/usuario', usuarioRouter);
+app.use('/usuario', usuarioRouter);
 app.use('/buscar', buscarRouter)
 
 app.use(manejadorErroresGlobal); //Manejamos los errores desde un middleware
