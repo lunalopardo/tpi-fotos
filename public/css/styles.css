@@ -393,6 +393,14 @@ a {
     text-decoration: underline;
 }
 
+.photo-copyright-status.has-copyright {
+    color: #e74c3c;
+}
+
+.photo-copyright-status.no-copyright {
+    color: #2ecc71;
+}
+
 /* VERSION DE PANTALLA DIVIDIDA / china responsive */
 
 @media (max-width: 1250px) {

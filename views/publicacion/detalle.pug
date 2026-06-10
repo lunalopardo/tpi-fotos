@@ -39,6 +39,12 @@ block content
             each tag in foto.etiquetas.split(',')
               span.tag-badge ##{tag.trim()}
 
+        div.copyright-badge-wrapper(style="margin-top: 10px; font-size: 13px; font-weight: 600;")
+          if foto.copyright === 1
+            span.photo-copyright-status.has-copyright Con Copyright
+          else
+            span.photo-copyright-status.no-copyright Sin Copyright
+
       div.actions-box
         button.btn-action.btn-interest
           span.material-symbols-outlined handshake
@@ -46,7 +52,7 @@ block content
 
         form#form-valorar(action=`/publicacion/${foto.id_publicacion || foto.id}/valorar` method="POST")
           input#puntuacion-input(type="hidden" name="puntuacion" value="")
-          
+
           div.rating-stars-container
             //- está al revés porque tomaba los números de manera inversa.
             each estrella in [5, 4, 3, 2, 1]
@@ -73,16 +79,16 @@ block content
           if foto.comentarios && foto.comentarios.length > 0
             each c in foto.comentarios
               div.comment-item
-                //- Avatar redondo con la inicial del que comentó [eventualmente reemplazar por pfp!]
+                //- Avatar redondo con la inicial del que comentó
                 div.comment-avatar
                   | #{c.usuario && c.usuario.nombre_usuario ? c.usuario.nombre_usuario.charAt(0).toUpperCase() : 'U'}
-                
+
                 //- Cuerpo del comentario
                 div.comment-body
                   div.comment-meta
                     span.comment-author @#{c.usuario ? c.usuario.nombre_usuario : 'anónimo'}
                   p.comment-text= c.contenido
-                  
+
                   //- Fecha de creación del comentario
                   span.comment-date
                     - const fecha = new Date(c.fecha_creacion || c.createdAt);
@@ -97,17 +103,12 @@ block content
 
     document.querySelectorAll('.star-icon').forEach(star => {
       star.addEventListener('click', function() {
-        // Capturamos el valor de la estrella
         const valoracion = this.getAttribute('data-value');
-
-        // Lo guardamos en el input oculto 
         document.getElementById('puntuacion-input').value = valoracion;
 
-        // Pintamos las estrellas
         document.querySelectorAll('.star-icon').forEach(s => s.classList.remove('selected'));
         this.classList.add('selected');
 
-        // Confirmar voto
         if (confirmarVoto()) {
           document.getElementById('form-valorar').submit();
         }
@@ -117,6 +118,6 @@ block content
     function confirmarVoto() {
       const puntos = document.getElementById('puntuacion-input').value;
       if (!puntos) return false;
-      
+
       return confirm(`¿Estás seguro de calificar esta imagen con ${puntos} estrellas? Recordá que solo podés votar una vez.`);
     }

@@ -37,8 +37,8 @@ block content
                 span.rating-val(style="color: #a0aec0; font-size: 13px; font-weight: 500;") #{foto.promedioFormateado || '0.0'}
 
               if foto.copyright === 1
-                span.photo-copyright-status Con Copyright
+                span.photo-copyright-status.has-copyright Con Copyright
               else
-                span.photo-copyright-status Sin Copyright
+                span.photo-copyright-status.no-copyright Sin Copyright
     else
       p.page-subtitle No hay publicaciones disponibles en este momento.

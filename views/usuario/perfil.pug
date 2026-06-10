@@ -51,6 +51,5 @@ block content
             div.photo-info
               h3.photo-title
                 a(href=`/publicacion/${foto.id_publicacion}`)= foto.titulo
-              p.photo-author @#{perfilUsuario.nombre_usuario}
       else
         p.no-publications Este usuario todavía no tiene publicaciones.
