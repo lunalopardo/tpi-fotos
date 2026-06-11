@@ -1,7 +1,7 @@
-import sequelize from '../models/config.js';
-import Usuario from '../models/usuario.js';
-import { encriptarContrasenia } from '../helpers/hash.js';
-import { email } from 'zod';
+import sequelize from './models/config.js';
+import Usuario from './models/usuario.js';
+import { asociarClases } from './models/asociaciones.js';
+import { encriptarContrasenia } from './helpers/hash.js';
 
 const usersToCreate = [
     { nombre_usuario: 'Thrall', email: 'warchief@gmail.com' },
@@ -14,8 +14,13 @@ const usersToCreate = [
     { nombre_usuario: 'admin', email: 'admin@gmail.com' }
 ];
 
-async function seed() {
+async function inicializarBaseDeDatos() {
     try {
+        await sequelize.authenticate();
+        asociarClases(); 
+        // force: true borra las tablas existentes y las crea desde cero
+        await sequelize.sync({ force: true });
+
         for (const user of usersToCreate) {
             const passwordEncriptada = await encriptarContrasenia('password');
 
@@ -28,18 +33,19 @@ async function seed() {
             });
 
             if (creado) {
-                console.log(`+ Creado con éxito: ${user.nombre_usuario}`);
+                console.log(`  + Creado con éxito: ${user.nombre_usuario}`);
             } else {
-                console.log(`- Ya existía en la BD (No se reemplazó): ${user.nombre_usuario}`);
+                console.log(`  - Ya existía en la BD: ${user.nombre_usuario}`);
             }
         }
-
-        console.log('Seeding finalizado con éxito!');
+        console.log('Seeding finalizado con éxito.');
+        console.log('DB_INIT COMPLETADO!');
     } catch (error) {
-        console.error('Error en el seeder:', error);
+        console.error('Error al inicializar la base de datos:', error);
+        process.exit(1);
     } finally {
-        sequelize.close();
+        await sequelize.close();
     }
 }
 
-seed();
+inicializarBaseDeDatos();

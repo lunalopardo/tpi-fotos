@@ -1,16 +1,26 @@
 import 'dotenv/config';
 import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-  host: process.env.DB_HOST,
-  dialect: 'postgres',
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
+const esProduccion = process.env.DB_HOST && process.env.DB_HOST.includes('render.com');
+
+const sequelize = new Sequelize(
+    process.env.DB_NAME, 
+    process.env.DB_USER, 
+    process.env.DB_PASSWORD, 
+    {
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT || 5432,
+        dialect: 'postgres',
+        logging: false,
+        
+        dialectOptions: esProduccion ? {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        } : {}
     }
-  }
-});
+);
 
 try {
     await sequelize.authenticate();
