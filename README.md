@@ -29,9 +29,11 @@ npm start
 Luego, acceder a http://localhost:3000.
 
 ### Usuario de prueba
-De momento todos los usuarios tienen el mismo nivel de permiso, así que pueden crear uno nuevo o usar este:
+De momento todos los usuarios tienen el mismo nivel de permiso, así que pueden crear uno nuevo o usar estos:
 
 - Usuario: admin
+- Contraseña: password  
+- Usuario: prueba
 - Contraseña: password
 
 ---
@@ -41,7 +43,7 @@ Hasta ahora, el proyecto cuenta con las funcionalidades mínimas para la regular
 
 - Registro y login de usuarios con sesiones.
 - Creación de publicaciones con una o más imágenes y etiquetas.
-- Edición de publicaciones (Se permite cambiar título, descripción y cerrar comentarios).
+- Edición de publicaciones (Se permite cambiar título, descripción, etiquetas y cerrar comentarios).
 - Copyright:
     - Lógica de marca de agua en imágenes con Copyright (a elegir por el usuario o predeterminada).
     - Solo los usuarios que están logueados pueden ver las publicaciones con Copyright.
@@ -53,6 +55,7 @@ Hasta ahora, el proyecto cuenta con las funcionalidades mínimas para la regular
     - Filtros para encontrar publicaciones por título o etiquetas.
     - Filtros para encontrar autores.
     - Filtros para ordenar por antigüedad o valoración (tanto en la sección de búsqueda como en el inicio).
+    - Se permite buscar términos clickeando en las etiquetas de las publicaciones.
 
 ---
 
@@ -60,9 +63,11 @@ Hasta ahora, el proyecto cuenta con las funcionalidades mínimas para la regular
 Para la entrega final, me falta implementar:
 
 - Sistema de denuncias de publicaciones y comentarios.
+- Eliminar publicaciones y comentarios.
 - Motor de notificaciones en tiempo real.
 - Gestión de favoritos y colecciones personales.
 - Panel de "Validador de contenidos" para administradores.
 - La opción de mostrar interés en comprar una imagen y mensajería interna.
 - Más personalización para los perfiles de usuarios.
+- Sección de publicaciones de usuarios que sigo.
 

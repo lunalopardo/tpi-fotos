@@ -10,33 +10,25 @@ html(lang="es")
 
   body
     nav.navbar
-      a.navbar-brand(href="/")
-        img.navbar-logo(src="/images/logo2.png" alt="Fotaza 2 Logo")
+      .navbar-left
+        a.navbar-brand(href="/")
+          img.navbar-logo(src="/images/logo2.png" alt="Fotaza 2 Logo")
 
       form.search-container(action="/buscar" method="GET")
         span.material-symbols-outlined.search-icon search
         input.search-input(type="text" name="busqueda" placeholder="Buscar publicaciones o usuarios..")
         button.btn-search-submit(type="submit") Buscar
 
-      ul.navbar-actions
+      .navbar-right
         if session && session.usuario
-          li
-            a.btn-upload(href="/publicacion/nuevo") Crear Publicación
-          li
-            a.nav-icon-link(href="/usuario/notificaciones" title="Notificaciones") 
-              span.material-symbols-outlined notifications
-          li
-            a.nav-icon-link(href="/usuario/favoritos" title="Mis Favoritos") 
-              span.material-symbols-outlined favorite
-          li
-            a.nav-icon-link(href="/usuario/perfil" title="Mi Perfil") 
-              span.material-symbols-outlined account_circle
-          li
-            a.nav-icon-link(href="/auth/logout" title="Cerrar Sesión" style="color: #e74c3c;") 
-              span.material-symbols-outlined logout
+          a.btn-upload(href="/publicacion/nuevo") Crear Publicación
+          ul.navbar-actions
+            li: a.nav-icon-link(href="/" title="Notificaciones"): span.material-symbols-outlined notifications
+            li: a.nav-icon-link(href="/" title="Mis Favoritos"): span.material-symbols-outlined favorite
+            li: a.nav-icon-link(href="/usuario/perfil" title="Mi Perfil"): span.material-symbols-outlined account_circle
+            li: a.nav-icon-link(href="/auth/logout" title="Cerrar Sesión" style="color: #e74c3c;"): span.material-symbols-outlined logout
         else
-          li
-            a.btn-login(href="/auth/login") Iniciar Sesión
+          a.btn-login(href="/auth/login") Iniciar Sesión
 
     main.container
       block styles

@@ -53,6 +53,15 @@ app.use('/publicacion', publicacionRouter);
 app.use('/usuario', usuarioRouter);
 app.use('/buscar', buscarRouter)
 
+app.use((err, req, res, next) => {
+    console.error("Error capturado:", err.message);
+
+    res.status(err.status || 500).render('error', {
+        titulo: err.status === 404 ? 'No encontrado' : 'Error en el servidor',
+        mensaje: err.status ? err.message : 'Algo salió mal. Por favor, intenta de nuevo.'
+    });
+});
+
 app.use(manejadorErroresGlobal); //Manejamos los errores desde un middleware
 
 // Levantamos el servidor
