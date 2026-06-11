@@ -57,6 +57,7 @@
 
 /* Sección de información */
 .detail-info-section {
+    position: relative;
     width: 460px;
     display: flex;
     flex-direction: column;
@@ -126,7 +127,7 @@
     border: none;
     border-radius: 6px;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.80rem;
     cursor: pointer;
     color: white;
     transition: background 0.2s, transform 0.1s;
@@ -138,7 +139,7 @@
 }
 
 .btn-interest {
-    flex: 2;
+    flex: 3;
     background: #8c5cf1;
     color: #ffffff;
     padding: 0 16px;
@@ -150,14 +151,16 @@
     background: #7546db;
 }
 
-.btn-rate, .btn-fav {
-    flex: 1;
+.btn-rate,
+.btn-fav {
+    flex: 0 0 45px;
     max-width: 65px;
     background: #2a2c33;
     border: 1px solid #1e1f22;
 }
 
-.btn-rate:hover, .btn-fav:hover {
+.btn-rate:hover,
+.btn-fav:hover {
     background: #1e1f22;
 }
 
@@ -297,6 +300,18 @@
     font-style: italic;
 }
 
+.comments-closed-msg {
+    color: #e53e3e;
+    font-style: italic;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 10px;
+    background: #2a2c33;
+    border: 1px dashed #e53e3e;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
 /* ...--- VALORACIONES ---...*/
 .rating-stars-container {
     display: flex;
@@ -304,7 +319,7 @@
     justify-content: center;
     align-items: center;
     gap: 4px;
-    background: #2a2c33; /* Fondo de control unificado */
+    background: #2a2c33;
     padding: 0 10px;
     border-radius: 6px;
     height: 44px;
@@ -321,19 +336,53 @@
 
 /* Ilumina la estrella actual y las anteriores */
 .star-icon:hover,
-.star-icon:hover ~ .star-icon {
+.star-icon:hover~.star-icon {
     color: #ecc94b;
     transform: scale(1.1);
 }
 
 /* Clase para cuando el usuario ya hizo click y seleccionó una nota */
 .star-icon.selected,
-.star-icon.selected ~ .star-icon {
+.star-icon.selected~.star-icon {
     color: #f1c40f;
 }
 
+
+/* TOAST PARA CONFIRMAR VOTACIÓN */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+/* El estilo de la notificación */
+.toast-msg {
+    background: #2f855a;
+    /* Verde Fotaza */
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+
+
 /* responsive */
-@media (max-width: 950px) {
+@media (max-width: 1250px) {
     .detail-container {
         flex-direction: column;
         gap: 16px;
@@ -352,5 +401,9 @@
     .detail-info-section {
         width: 100%;
         padding: 16px;
+    }
+
+    .btn-interest{
+        max-width: fit-content;
     }
 }

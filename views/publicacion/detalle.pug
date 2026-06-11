@@ -1,12 +1,10 @@
 extends ../layout
-include ../mixins/alert.pug
 
 block styles 
   link(rel="stylesheet" href="../css/publicacion.css")
 
 block content
   div.detail-container
-
     //- Galería de imágenes
     div.detail-media-section
       div.main-image-wrapper
@@ -22,12 +20,16 @@ block content
 
     //- Datos y acciones
     div.detail-info-section
-
+      a.btn-close(href="javascript:history.back()") &times;
+      
       div.author-row
         div.pfp-placeholder
           | #{foto.usuario && foto.usuario.nombre_usuario ? foto.usuario.nombre_usuario.charAt(0).toUpperCase() : 'F'}
         span.username
-          | @#{foto.usuario && foto.usuario.nombre_usuario ? foto.usuario.nombre_usuario : 'fotografo'}
+          if foto.usuario && foto.usuario.id_usuario
+            a(href=`/usuario/${foto.usuario.id_usuario}` style="color: inherit; text-decoration: none;") @#{foto.usuario.nombre_usuario}
+          else
+            | @fotografo
 
       div.meta-box
         h1.detail-title= foto.titulo
@@ -45,6 +47,7 @@ block content
           else
             span.photo-copyright-status.no-copyright Sin Copyright
 
+      //- ACCIONES (Falta implementar 'Me interesa')
       div.actions-box
         button.btn-action.btn-interest
           span.material-symbols-outlined handshake
@@ -54,12 +57,11 @@ block content
           input#puntuacion-input(type="hidden" name="puntuacion" value="")
 
           div.rating-stars-container
-            //- está al revés porque tomaba los números de manera inversa.
+            //- Pinta automáticamente la estrella que coincida con miVoto
             each estrella in [5, 4, 3, 2, 1]
-              span.star-icon(data-value=estrella) ★
-            //- muestra el promedio de valoraciones
-            span.rating-number(style="color: #a0aec0; font-weight: bold; font-size: 18px;") #{foto.promedioFormateado || '0.0'}
-
+              span.star-icon(data-value=estrella class=(foto.miVoto == estrella ? 'selected' : '')) ★
+            
+            span#rating-display.rating-number(style="color: #a0aec0; font-weight: bold; font-size: 18px;") #{foto.promedioFormateado || '0.0'} (#{foto.cantidadVotos || 0})
 
         button.btn-action.btn-fav
           span.material-symbols-outlined favorite
@@ -79,17 +81,16 @@ block content
           if foto.comentarios && foto.comentarios.length > 0
             each c in foto.comentarios
               div.comment-item
-                //- Avatar redondo con la inicial del que comentó
                 div.comment-avatar
                   | #{c.usuario && c.usuario.nombre_usuario ? c.usuario.nombre_usuario.charAt(0).toUpperCase() : 'U'}
-
-                //- Cuerpo del comentario
                 div.comment-body
                   div.comment-meta
-                    span.comment-author @#{c.usuario ? c.usuario.nombre_usuario : 'anónimo'}
+                    if c.usuario && c.usuario.id_usuario
+                      a(href=`/usuario/${c.usuario.id_usuario}` style="color: #63b3ed; text-decoration: none;")
+                        span.comment-author @#{c.usuario.nombre_usuario}
+                    else
+                      span.comment-author @anónimo
                   p.comment-text= c.contenido
-
-                  //- Fecha de creación del comentario
                   span.comment-date
                     - const fecha = new Date(c.fecha_creacion || c.createdAt);
                     | Comentado el #{fecha.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit' })}
@@ -98,26 +99,41 @@ block content
 
   script.
     function changeImage(url) {
-      document.getElementById('current-image').src = url;
-    }
-
+        document.getElementById('current-image').src = url;
+      }
     document.querySelectorAll('.star-icon').forEach(star => {
       star.addEventListener('click', function() {
-        const valoracion = this.getAttribute('data-value');
-        document.getElementById('puntuacion-input').value = valoracion;
+        const nuevoVoto = this.getAttribute('data-value');
 
-        document.querySelectorAll('.star-icon').forEach(s => s.classList.remove('selected'));
-        this.classList.add('selected');
+        if (confirm(`¿Confirmar valoración de ${nuevoVoto} estrellas?`)) {
+          document.getElementById('puntuacion-input').value = nuevoVoto;
+          
+          fetch(document.getElementById('form-valorar').action, {
+              method: 'POST',
+              body: new URLSearchParams(new FormData(document.getElementById('form-valorar')))
+          })
+          .then(res => res.json())
+          .then(data => {
+              // Actualizamos promedio y estrellas
+              document.getElementById('rating-display').innerText = 
+                  `${data.nuevoPromedio} (${data.nuevaCantidad})`;
 
-        if (confirmarVoto()) {
-          document.getElementById('form-valorar').submit();
+              document.querySelectorAll('.star-icon').forEach(s => s.classList.remove('selected'));
+              
+              // Buscamos la estrella con el valor del voto recién guardado
+              document.querySelectorAll('.star-icon').forEach(s => {
+                  if(parseInt(s.getAttribute('data-value')) <= parseInt(nuevoVoto)) {
+                      s.classList.add('selected');
+                  }
+              });
+
+              // Toast
+              const toast = document.createElement('div');
+              toast.className = 'toast-container';
+              toast.innerHTML = '<div class="toast-msg">¡Valoración guardada!</div>';
+              document.body.appendChild(toast);
+              setTimeout(() => toast.remove(), 3000);
+          });
         }
       });
     });
-
-    function confirmarVoto() {
-      const puntos = document.getElementById('puntuacion-input').value;
-      if (!puntos) return false;
-
-      return confirm(`¿Estás seguro de calificar esta imagen con ${puntos} estrellas? Recordá que solo podés votar una vez.`);
-    }

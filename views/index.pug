@@ -1,6 +1,18 @@
 extends layout
 
 block content
+
+  if publicaciones && publicaciones.length > 0
+    div.filter-container(style="display: flex; justify-content: flex-end; margin-bottom: 20px;")
+      form.search-filter-form(method="GET" action="/")
+        //-Se puede ordenar las imégenes del inicio por antigüedad o valoraciones, para que no quede siempre lo mismo arriba.
+        div.select-contenedor
+            select#orden.filter-select(name="orden" onchange="this.form.submit()")
+              option(value="reciente" selected=(ordenActual === 'reciente')) Más reciente
+              option(value="antiguo" selected=(ordenActual === 'antiguo')) Más antiguo
+              option(value="mejor" selected=(ordenActual === 'mejor')) Mejor valorado
+              option(value="peor" selected=(ordenActual === 'peor')) Peor valorado
+
   div.gallery-grid
     if publicaciones && publicaciones.length > 0
       each foto in publicaciones
@@ -22,7 +34,8 @@ block content
 
             p.photo-author
               if foto.usuario && foto.usuario.nombre_usuario
-                | @#{foto.usuario.nombre_usuario}
+                //- Los users pueden hacer click en el nombre del autor del post para ir a su perfil directamente.
+                a.author-link(href=`/usuario/${foto.usuario.id_usuario}`) @#{foto.usuario.nombre_usuario}
               else
                 | @fotografo
 
@@ -34,7 +47,8 @@ block content
             div.photo-card-footer            
               div.photo-stat-rating
                 span.star-mini(style="font-size: 14px;") ★
-                span.rating-val(style="color: #a0aec0; font-size: 13px; font-weight: 500;") #{foto.promedioFormateado || '0.0'}
+                //- Se muestra la cantidad de votos y el promedio.
+                span.rating-val(style="color: #a0aec0; font-size: 13px; font-weight: 500;") #{foto.promedioFormateado || '0.0'} (#{foto.cantidadVotos || 0})
 
               if foto.copyright === 1
                 span.photo-copyright-status.has-copyright Con Copyright

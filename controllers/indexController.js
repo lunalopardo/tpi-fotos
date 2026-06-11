@@ -1,64 +1,82 @@
-import Publicacion from '../models/Publicacion.js';
+import Publicacion from '../models/publicacion.js';
 import Usuario from '../models/usuario.js';
 import Valoracion from '../models/valoracion.js'
 import { Sequelize } from 'sequelize';
-import { parsearImagenesBase64 } from '../helpers/imagenesHelper.js';
-
-Publicacion.belongsTo(Usuario, { foreignKey: 'id_usuario' });
-Usuario.hasMany(Publicacion, { foreignKey: 'id_usuario' });
+import { obtenerArrayImagenes } from '../helpers/imagenesHelper.js';
 
 export const renderHome = async (req, res, next) => {
     try {
         const estaLogueado = req.session && req.session.usuario;
         const condicionesFiltro = { estado: 'activa' };
+        
+        const orden = req.query.orden || 'reciente';
 
         if (!estaLogueado) {
-            condicionesFiltro.copyright = 0; 
+            condicionesFiltro.copyright = 0;
+        }
+
+        let ordenSequelize = [['fecha_subida', 'DESC']];
+        if (orden === 'antiguo') {
+            ordenSequelize = [['fecha_subida', 'ASC']];
         }
 
         const publicacionesDB = await Publicacion.findAll({
             where: condicionesFiltro,
+            order: ordenSequelize,
             include: [
                 {
                     model: Usuario,
-                    attributes: ['nombre_usuario']
+                    // traemos el id_usuario para poder armar el link del perfil
+                    attributes: ['id_usuario', 'nombre_usuario'] 
                 }
             ]
         });
 
-        const promediosDB = await Valoracion.findAll({
+const promediosDB = await Valoracion.findAll({
             attributes: [
                 'id_publicacion',
-                [Sequelize.fn('AVG', Sequelize.col('puntuacion')), 'promedioTotal']
+                [Sequelize.fn('AVG', Sequelize.col('puntuacion')), 'promedioTotal'],
+                [Sequelize.fn('COUNT', Sequelize.col('puntuacion')), 'cantidadVotos']
             ],
             group: ['id_publicacion']
         });
 
         const mapaPromedios = {};
         promediosDB.forEach(p => {
-            mapaPromedios[p.id_publicacion] = p.get('promedioTotal');
+            mapaPromedios[p.id_publicacion] = {
+                promedio: p.get('promedioTotal'),
+                cantidad: p.get('cantidadVotos')
+            };
         });
 
         const publicacionesProcesadas = publicacionesDB.map(pub => {
-            const fotoPlana = pub.get({ plain: true }); 
-            
-            if (!fotoPlana.rutas_archivos) {
-                fotoPlana.imagenes = [];
-            } else {
-                fotoPlana.imagenes = parsearImagenesBase64(fotoPlana.rutas_archivos);
-            }
-
+            const fotoPlana = pub.get({ plain: true });
             const idDeLaPub = fotoPlana.id_publicacion || fotoPlana.id;
-            const promedioCrudo = mapaPromedios[idDeLaPub];
+
+            fotoPlana.imagenes = obtenerArrayImagenes(fotoPlana.rutas_archivos, idDeLaPub);
+
+            const datosValoracion = mapaPromedios[idDeLaPub] || { promedio: 0, cantidad: 0 };
+            const promedioCrudo = datosValoracion.promedio;
             
             fotoPlana.promedioFormateado = promedioCrudo ? Number(promedioCrudo).toFixed(1) : '0.0';
-            
+            fotoPlana.cantidadVotos = datosValoracion.cantidad;
+            // Guardamos como número para el filtro JS
+            fotoPlana.promedioNumerico = promedioCrudo ? Number(promedioCrudo) : 0.0; 
+
             return fotoPlana;
         });
 
-        res.render('index', { 
-            titulo: 'Fotaza 2 - Inicio', 
-            publicaciones: publicacionesProcesadas 
+        if (orden === 'mejor') {
+            publicacionesProcesadas.sort((a, b) => b.promedioNumerico - a.promedioNumerico);
+        } else if (orden === 'peor') {
+            publicacionesProcesadas.sort((a, b) => a.promedioNumerico - b.promedioNumerico);
+        }
+
+        res.render('index', {
+            titulo: 'Fotaza 2 - Inicio',
+            publicaciones: publicacionesProcesadas,
+            usuarioSesion: req.session ? req.session.usuario : null,
+            ordenActual: orden
         });
 
     } catch (error) {
