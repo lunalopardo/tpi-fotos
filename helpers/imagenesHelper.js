@@ -1,5 +1,14 @@
-// Extrae los strings Base64 de las imágenes empaquetadas en rutas_archivos
-export function parsearImagenesBase64(rutasArchivos) {
-    if (!rutasArchivos) return [];
-    return rutasArchivos.match(/data:image\/[^;]+;base64,[^,]+/g) || [];
+
+// Genera rutas URL amigables para las imágenes de la publicación, evitando enviar datos pesados Base64 directamente al HTML como tenía antes.
+export function obtenerArrayImagenes(rutasArchivos, idPublicacion) {
+    if (!rutasArchivos || !idPublicacion) return [];
+
+    const cantidadImagenes = rutasArchivos.split('|').length;
+    const arrayUrls = [];
+
+    for (let i = 0; i < cantidadImagenes; i++) {
+        arrayUrls.push(`/publicacion/foto/${idPublicacion}/${i}`);
+    }
+
+    return arrayUrls;
 }

@@ -2,7 +2,7 @@ import Usuario from '../models/usuario.js';
 import Publicacion from '../models/publicacion.js';
 import Valoracion from '../models/valoracion.js';
 import { Sequelize, Op } from 'sequelize';
-import { parsearImagenesBase64 } from '../helpers/imagenesHelper.js';
+import { obtenerArrayImagenes } from '../helpers/imagenesHelper.js';
 import { getAuthenticatedUserId } from '../helpers/auth.js';
 
 export const realizarBusqueda = async (req, res, next) => {
@@ -53,11 +53,12 @@ export const realizarBusqueda = async (req, res, next) => {
             })
             .map(pub => {
                 const fotoPlana = pub.get({ plain: true });
-                fotoPlana.imagenes = parsearImagenesBase64(fotoPlana.rutas_archivos);
-
+                
                 const idDeLaPub = fotoPlana.id_publicacion || fotoPlana.id;
-                const promedioCrudo = mapaPromedios[idDeLaPub];
 
+                fotoPlana.imagenes = obtenerArrayImagenes(fotoPlana.rutas_archivos, idDeLaPub);
+
+                const promedioCrudo = mapaPromedios[idDeLaPub];
                 fotoPlana.promedioFormateado = promedioCrudo ? Number(promedioCrudo).toFixed(1) : '0.0';
 
                 // Guardamos el valor como número para poder comparar con el .sort() para el filtro

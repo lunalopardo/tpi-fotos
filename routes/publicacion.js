@@ -1,14 +1,15 @@
 import express from 'express';
-import { getNuevaPublicacion, getUnaPublicacion, postNuevaPublicacion, postNuevoComentario } from '../controllers/publicacionController.js';
-import { protegerRuta } from '../middleware/authMiddleware.js'; //con esto sacamos a los usuarios no registrados de las vistas que no deberían poder ver.
-import { valorarPublicacion } from '../controllers/publicacionController.js';
+import { getNuevaPublicacion, getUnaPublicacion, postNuevaPublicacion, postNuevoComentario, valorarPublicacion, getImagenIndividual } from '../controllers/publicacionController.js';
+import { protegerRuta } from '../middleware/authMiddleware.js';
 import { realizarBusqueda } from '../controllers/buscarController.js';
 
 const router = express.Router();
 
 router.get('/nuevo', protegerRuta, getNuevaPublicacion);
 router.post('/nuevo', protegerRuta, postNuevaPublicacion);
-router.get('/buscar', realizarBusqueda); 
+router.get('/buscar', realizarBusqueda);
+
+router.get('/foto/:id/:index', getImagenIndividual);
 
 router.get('/:id', getUnaPublicacion);
 

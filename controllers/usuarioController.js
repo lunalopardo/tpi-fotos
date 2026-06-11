@@ -3,7 +3,7 @@ import Usuario from '../models/usuario.js';
 import Seguidor from '../models/seguidor.js';
 import { Op, Sequelize } from 'sequelize';
 import { getAuthenticatedUserId } from '../helpers/auth.js';
-import { parsearImagenesBase64 } from '../helpers/imagenesHelper.js';
+import { obtenerArrayImagenes } from '../helpers/imagenesHelper.js';
 
 
 
@@ -33,11 +33,9 @@ export const getPerfil = async (req, res, next) => {
         // PARSEO IGUAL AL INDEX
         const publicacionesDeUser = publicacionesBD.map(pub => {
             const fotoPlana = pub.get({ plain: true });
-            if (!fotoPlana.rutas_archivos) {
-                fotoPlana.imagenes = [];
-            } else {
-                fotoPlana.imagenes = fotoPlana.rutas_archivos.match(/data:image\/[^;]+;base64,[^,]+/g) || [];
-            }
+            const idDeLaPub = fotoPlana.id_publicacion;
+            fotoPlana.imagenes = obtenerArrayImagenes(fotoPlana.rutas_archivos, idDeLaPub);
+
             return fotoPlana;
         });
 
@@ -97,11 +95,9 @@ export const getMiPerfil = async (req, res, next) => {
         // PARSEO IGUAL AL INDEX
         const publicacionesDeUser = publicacionesBD.map(pub => {
             const fotoPlana = pub.get({ plain: true });
-            if (!fotoPlana.rutas_archivos) {
-                fotoPlana.imagenes = [];
-            } else {
-                fotoPlana.imagenes = parsearImagenesBase64(fotoPlana.rutas_archivos);
-            }
+            const idDeLaPub = fotoPlana.id_publicacion;
+            fotoPlana.imagenes = obtenerArrayImagenes(fotoPlana.rutas_archivos, idDeLaPub);
+
             return fotoPlana;
         });
 
