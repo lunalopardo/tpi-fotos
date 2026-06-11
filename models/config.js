@@ -11,6 +11,7 @@ const sequelize = new Sequelize(
         host: process.env.DB_HOST,
         port: process.env.DB_PORT || 5432,
         dialect: 'postgres',
+        timezone: '-03:00',
         logging: false,
         
         dialectOptions: esProduccion ? {

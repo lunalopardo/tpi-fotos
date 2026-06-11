@@ -5,7 +5,7 @@
  * @returns {number|null} ID del usuario o null si no está autenticado
  */
 export function getAuthenticatedUserId(req) {
-    const userId = Number(req.session?.usuario?.id);
+    const userId = Number(req.session?.usuario?.id_usuario);
     if (!Number.isInteger(userId) || userId <= 0) {
         return null;
     }

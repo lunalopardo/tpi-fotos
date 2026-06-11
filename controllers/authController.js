@@ -59,7 +59,7 @@ export const postLogin = async (req, res, next) => {
         }
 
         req.session.usuario = {
-            id: usuario.id_usuario,
+            id_usuario: usuario.id_usuario,
             nombre: usuario.nombre_usuario,
         };
 

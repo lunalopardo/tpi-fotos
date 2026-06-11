@@ -1,8 +1,12 @@
-## TRABAJO INTEGRADOR DE WEB 2
+# TRABAJO INTEGRADOR DE WEB 2
 
 Este es el proyecto "Fotaza 2" para Programación Web II. Es una plataforma para compartir, valorar y comentar fotografías. Próximamente se podrá mostrar interés en comprarlas! 
 
-### Cómo ponerlo en marcha (Local)
+## Demo en vivo
+La aplicación está desplegada y disponible para ver a través del siguiente enlace:
+[Ver aplicación en Render](https://tpi-fotos.onrender.com)
+
+## Cómo ponerlo en marcha (Local)
 
 Para que el proyecto funcione, seguí estos pasos:
 
@@ -24,31 +28,33 @@ npm start
 ```
 Luego, acceder a http://localhost:3000.
 
-
-#### Usuario de prueba
+### Usuario de prueba
 De momento todos los usuarios tienen el mismo nivel de permiso, así que pueden crear uno nuevo o usar este:
 
-Usuario: admin
-Contraseña: password
+- Usuario: admin
+- Contraseña: password
 
+---
 
 ### Lo implementado hasta esta instancia (Estado actual)
 Hasta ahora, el proyecto cuenta con las funcionalidades mínimas para la regularización:
 
 - Registro y login de usuarios con sesiones.
 - Creación de publicaciones con una o más imágenes y etiquetas.
+- Edición de publicaciones (Se permite cambiar título, descripción y cerrar comentarios).
 - Copyright:
     - Lógica de marca de agua en imágenes con Copyright (a elegir por el usuario o predeterminada).
     - Solo los usuarios que están logueados pueden ver las publicaciones con Copyright.
-- Sección de comentarios en cada publicación & opción de cerrar comentarios desde la creación de la misma.
-- Sistema de estrellas para calificar publicaciones.
-- Sistema de "Seguir/ Dejar de seguir" usuarios
-- Perfil de usuarios con: seguidos, seguidores y publicaciones.
+- Sección de comentarios en cada publicación & opción de cerrar comentarios desde la creación de la misma o edición.
+- Sistema de 5 estrellas para calificar publicaciones, mostrando promedio y cantidad de valoraciones.
+- Sistema de "Seguir/ Dejar de seguir" usuarios.
+- Perfil de usuarios con: seguidos, seguidores y grilla de publicaciones.
 - Buscador: 
     - Filtros para encontrar publicaciones por título o etiquetas.
     - Filtros para encontrar autores.
-    - Filtros para ordenar por antigüedad o valoración.
+    - Filtros para ordenar por antigüedad o valoración (tanto en la sección de búsqueda como en el inicio).
 
+---
 
 ### Pendientes (Para la etapa del final)
 Para la entrega final, me falta implementar:
@@ -58,4 +64,5 @@ Para la entrega final, me falta implementar:
 - Gestión de favoritos y colecciones personales.
 - Panel de "Validador de contenidos" para administradores.
 - La opción de mostrar interés en comprar una imagen y mensajería interna.
+- Más personalización para los perfiles de usuarios.
 

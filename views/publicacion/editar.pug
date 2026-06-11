@@ -1,0 +1,32 @@
+extends ../layout
+
+block styles
+  link(rel="stylesheet" href="/css/publicacion.css")
+
+block content
+    div.auth-wrapper(style="max-width: 550px;")
+        div.auth-header
+            h1.auth-title Editar Publicación
+            p.auth-subtitle Ajusta los detalles de tu publicación.
+
+        if error
+            div.alert-error
+                p= error
+        form(action=`/publicacion/editar/${publicacion.id_publicacion}` method="POST")
+
+            div.form-group
+                label.form-label Título de la Publicación
+                input.form-input(type="text" name="titulo" value=publicacion.titulo required)
+
+            div.form-group
+                label.form-label Descripción (Opcional)
+                textarea.form-input(name="descripcion" rows="3")= publicacion.descripcion
+
+            div.form-group.checkbox-group
+                //- Permitir comentarios es el checkbox pero en la BD lo tengo como comentarios_cerrados, así que se guarda el opuesto
+                input#permitir_comentarios(type="checkbox" name="permitir_comentarios" checked=(publicacion.comentarios_cerrados === 0))
+                label(for="permitir_comentarios") Permitir que otros usuarios dejen comentarios
+            
+            div.actions-box
+                a.btn-cancel(href=`/publicacion/${publicacion.id_publicacion}`) Cancelar
+                button.btn-auth-submit(type="submit") Guardar Cambios

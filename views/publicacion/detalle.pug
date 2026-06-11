@@ -20,7 +20,7 @@ block content
 
     //- Datos y acciones
     div.detail-info-section
-      a.btn-close(href="javascript:history.back()") &times;
+      a.btn-close(href="#" onclick="location.href = document.referrer; return false;") &times;
       
       div.author-row
         div.pfp-placeholder
@@ -47,6 +47,9 @@ block content
           else
             span.photo-copyright-status.no-copyright Sin Copyright
 
+        if usuarioSesion && usuarioSesion.id_usuario === foto.id_usuario
+          a.btn-edit(href=`/publicacion/editar/${foto.id_publicacion}`) Editar publicación
+
       //- ACCIONES (Falta implementar 'Me interesa')
       div.actions-box
         button.btn-action.btn-interest
@@ -68,7 +71,6 @@ block content
 
       div.comments-box
         h3 Comentarios
-
         if foto.comentarios_cerrados === 1
           p.comments-closed-msg El autor cerró los comentarios para esta publicación.
         else
@@ -77,25 +79,25 @@ block content
               input.add-comment(type="text" name="contenido" placeholder="Escribe un comentario...")
               button.btn-send-comment Enviar
 
-          div.comments-list
-          if foto.comentarios && foto.comentarios.length > 0
-            each c in foto.comentarios
-              div.comment-item
-                div.comment-avatar
-                  | #{c.usuario && c.usuario.nombre_usuario ? c.usuario.nombre_usuario.charAt(0).toUpperCase() : 'U'}
-                div.comment-body
-                  div.comment-meta
-                    if c.usuario && c.usuario.id_usuario
-                      a(href=`/usuario/${c.usuario.id_usuario}` style="color: #63b3ed; text-decoration: none;")
-                        span.comment-author @#{c.usuario.nombre_usuario}
-                    else
-                      span.comment-author @anónimo
-                  p.comment-text= c.contenido
-                  span.comment-date
-                    - const fecha = new Date(c.fecha_creacion || c.createdAt);
-                    | Comentado el #{fecha.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit' })}
-          else
-            p.comments-placeholder No hay comentarios aún. ¡Sé el primero en comentar!
+      div.comments-list
+      if foto.comentarios && foto.comentarios.length > 0
+        each c in foto.comentarios
+          div.comment-item
+            div.comment-avatar
+              | #{c.usuario && c.usuario.nombre_usuario ? c.usuario.nombre_usuario.charAt(0).toUpperCase() : 'U'}
+            div.comment-body
+              div.comment-meta
+                if c.usuario && c.usuario.id_usuario
+                  a(href=`/usuario/${c.usuario.id_usuario}` style="color: #63b3ed; text-decoration: none;")
+                    span.comment-author @#{c.usuario.nombre_usuario}
+                else
+                  span.comment-author @anónimo
+              p.comment-text= c.contenido
+              span.comment-date
+                - const fecha = new Date(c.fecha_creacion || c.createdAt);
+                | Comentado el #{fecha.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit' })}
+      else
+        p.comments-placeholder No hay comentarios aún. ¡Sé el primero en comentar!
 
   script.
       // Función para cambiar la imagen apretando en las thumbnails

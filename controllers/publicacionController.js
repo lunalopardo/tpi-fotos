@@ -81,7 +81,7 @@ export const getUnaPublicacion = async (req, res, next) => {
             foto: fotoPlana,
             usuarioSesion: req.session ? req.session.usuario : null,
         });
-
+        
     } catch (error) {
         next(error);
     }
@@ -205,6 +205,42 @@ export const getImagenIndividual = async (req, res, next) => {
         next(error);
     }
 };
+
+// EDITAR PUBLICACIÓN
+export const getEditarPublicacion = async (req, res) => {
+    try {
+        const publicacion = await Publicacion.findByPk(req.params.id);
+        const idUsuarioAutenticado = getAuthenticatedUserId(req);
+
+        if (publicacion.id_usuario !== idUsuarioAutenticado) {
+            return res.status(403).send("No tienes permiso para editar esta publicación.");
+        }
+
+        res.render('publicacion/editar', { publicacion });
+    } catch (error) {
+        res.status(500).send("Error al cargar la publicación.");
+    }
+};
+
+export const editarPublicacion = async (req, res) => {
+    const { titulo, descripcion, copyright, marca_agua_texto, permitir_comentarios } = req.body;
+    
+    const publicacion = await Publicacion.findByPk(req.params.id);
+    if (publicacion.id_usuario !== getAuthenticatedUserId(req)) {
+        return res.status(403).send("No tenés permiso o la publicación no existe.");
+    }
+
+    const comentarios_cerrados = permitir_comentarios === 'on' ? 0 : 1; 
+
+    await publicacion.update({
+        titulo,
+        descripcion,
+        comentarios_cerrados
+    });
+
+    res.redirect('/publicacion/' + req.params.id);
+};
+
 
 // COMENTARIOS
 export const postNuevoComentario = async (req, res) => {

@@ -312,6 +312,65 @@
     margin-top: 10px;
 }
 
+/*BOTONES EDITAR */
+.btn-auth-submit,
+.btn-cancel {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-auth-submit {
+    background-color: #6a994e;
+    color: #ffffff;
+}
+
+.btn-auth-submit:hover {
+    background-color: #557d3e;
+}
+
+.btn-cancel {
+    background-color: #bc4749;
+    color: #ffffff;
+    margin-top: 12px;
+}
+
+.btn-cancel:hover {
+    background-color: #a53a3c;
+}
+
+.btn-edit {
+    display: block;
+    max-width: fit-content;
+    margin-top: 20px;
+    padding: 12px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 12px;
+    border: none;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-edit {
+    background-color: #2A2C33;
+    color: #ffffff;
+}
+
+.btn-edit:hover {
+    background-color: #1b1c21;
+}
+
+
+
 /* ...--- VALORACIONES ---...*/
 .rating-stars-container {
     display: flex;
@@ -357,7 +416,7 @@
     color: white;
     border-radius: 8px;
     font-weight: bold;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     z-index: 9999;
     max-width: 300px;
     pointer-events: none;
@@ -399,7 +458,7 @@
         padding: 16px;
     }
 
-    .btn-interest{
+    .btn-interest {
         max-width: fit-content;
     }
 }
