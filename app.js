@@ -32,7 +32,7 @@ app.use(express.static('./public'));
 
 // req.session
 app.use(session({
-    secret: 'clave-secreta-super-segura',
+    secret: process.env.SESSION_SECRET || 'clave-secreta-por-defecto',
     resave: false,
     saveUninitialized: false,
     cookie: {
