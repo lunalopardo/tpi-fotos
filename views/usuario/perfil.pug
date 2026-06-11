@@ -19,8 +19,14 @@ block content
         
         .profile-stats
           span #[strong #{stats.publicaciones}] publicaciones
-          span #[strong #{stats.seguidores}] seguidores
-          span #[strong #{stats.seguidos}] seguidos
+          a(href=`/usuario/${perfilUsuario.id_usuario}/relaciones?tipo=seguidores` style="text-decoration:none; color:inherit; margin: 0 10px;") 
+            strong #{stats.seguidores} 
+            | seguidores
+            
+          a(href=`/usuario/${perfilUsuario.id_usuario}/relaciones?tipo=seguidos` style="text-decoration:none; color:inherit;") 
+            strong #{stats.seguidos} 
+            | seguidos
+          
 
         //- Filtro de seguridad para el botón Seguir
         if session && session.usuario && perfilUsuario && session.usuario.id !== perfilUsuario.id_usuario

@@ -161,3 +161,24 @@ export const toggleSeguirUsuario = async (req, res, next) => {
         next(error);
     }
 };
+
+// Traemos los seguidores para mostrarlos en una vista sencilla.
+export const getSeguidores = async (req, res) => {
+    const { id } = req.params;
+    const tipo = req.query.tipo; // 'seguidores' o 'seguidos'
+
+    const usuario = await Usuario.findByPk(id, {
+        include: [{
+            model: Usuario,
+            as: tipo === 'seguidos' ? 'misSeguidos' : 'misSeguidores',
+            attributes: ['id_usuario', 'nombre_usuario']
+        }]
+    });
+
+    const lista = tipo === 'seguidos' ? usuario.misSeguidos : usuario.misSeguidores;
+
+    res.render('usuario/seguidos', {
+        titulo: tipo === 'seguidos' ? 'A quienes sigue' : 'Sus seguidores',
+        lista: lista
+    });
+};

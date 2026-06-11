@@ -1,0 +1,20 @@
+extends ../layout
+
+block styles
+  link(rel="stylesheet" href="/css/perfil.css")
+
+block content
+  div.relaciones-container
+    h2.relaciones-title= titulo
+    
+    if lista && lista.length > 0
+      div.users-list
+        each user in lista
+          a.user-item(href=`/usuario/${user.id_usuario}`)
+            div.pfp-mini
+              | #{user.nombre_usuario.charAt(0).toUpperCase()}
+            span.username-link @#{user.nombre_usuario}
+    else
+      p(style="color: #a0aec0;") No hay usuarios en esta lista.
+
+    a.btn-back(href="javascript:history.back()" style="margin-top: 20px; display: inline-block;") ← Volver atrás

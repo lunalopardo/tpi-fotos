@@ -41,7 +41,7 @@ block content
             each tag in foto.etiquetas.split(',')
               span.tag-badge ##{tag.trim()}
 
-        div.copyright-badge-wrapper(style="margin-top: 10px; font-size: 13px; font-weight: 600;")
+        div.copyright-badge-wrapper(style="margin-top: 15px; font-size: 13px; font-weight: 600;")
           if foto.copyright === 1
             span.photo-copyright-status.has-copyright Con Copyright
           else
@@ -98,42 +98,54 @@ block content
             p.comments-placeholder No hay comentarios aún. ¡Sé el primero en comentar!
 
   script.
-    function changeImage(url) {
+      // Función para cambiar la imagen apretando en las thumbnails
+      function changeImage(url) {
         document.getElementById('current-image').src = url;
       }
-    document.querySelectorAll('.star-icon').forEach(star => {
-      star.addEventListener('click', function() {
-        const nuevoVoto = this.getAttribute('data-value');
 
-        if (confirm(`¿Confirmar valoración de ${nuevoVoto} estrellas?`)) {
-          document.getElementById('puntuacion-input').value = nuevoVoto;
-          
-          fetch(document.getElementById('form-valorar').action, {
-              method: 'POST',
-              body: new URLSearchParams(new FormData(document.getElementById('form-valorar')))
-          })
-          .then(res => res.json())
-          .then(data => {
-              // Actualizamos promedio y estrellas
-              document.getElementById('rating-display').innerText = 
-                  `${data.nuevoPromedio} (${data.nuevaCantidad})`;
+      // Función para mostrar el toast
+    function showToast(mensaje, esError = false) {
+      const toast = document.createElement('div');
+      toast.className = 'toast-notification';
+      toast.style.backgroundColor = esError ? '#e53e3e' : '#48bb78';
+      toast.innerText = mensaje;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => toast.remove(), 3000);
+    }
 
-              document.querySelectorAll('.star-icon').forEach(s => s.classList.remove('selected'));
-              
-              // Buscamos la estrella con el valor del voto recién guardado
-              document.querySelectorAll('.star-icon').forEach(s => {
-                  if(parseInt(s.getAttribute('data-value')) <= parseInt(nuevoVoto)) {
-                      s.classList.add('selected');
-                  }
-              });
+      // Lógica de votación
+      document.querySelectorAll('.star-icon').forEach(star => {
+        star.addEventListener('click', function() {
+          const nuevoVoto = this.getAttribute('data-value');
 
-              // Toast
-              const toast = document.createElement('div');
-              toast.className = 'toast-container';
-              toast.innerHTML = '<div class="toast-msg">¡Valoración guardada!</div>';
-              document.body.appendChild(toast);
-              setTimeout(() => toast.remove(), 3000);
-          });
-        }
+          if (confirm(`¿Confirmar valoración de ${nuevoVoto} estrellas?`)) {
+            document.getElementById('puntuacion-input').value = nuevoVoto;
+            
+            fetch(document.getElementById('form-valorar').action, {
+                method: 'POST',
+                body: new URLSearchParams(new FormData(document.getElementById('form-valorar')))
+            })
+            .then(async res => {
+              const data = await res.json();
+              if (!res.ok) throw new Error(data.error || "Error al votar");
+              return data;
+            })
+            .then(data => {
+                // ÉXITO
+                document.getElementById('rating-display').innerText = `${data.nuevoPromedio} (${data.nuevaCantidad})`;
+                document.querySelectorAll('.star-icon').forEach(s => s.classList.remove('selected'));
+                document.querySelectorAll('.star-icon').forEach(s => {
+                    if(parseInt(s.getAttribute('data-value')) <= parseInt(nuevoVoto)) {
+                        s.classList.add('selected');
+                    }
+                });
+                showToast("¡Valoración guardada!");
+            })
+            .catch(err => {
+                // FRACASO
+                showToast(err.message, true);
+            });
+          }
+        });
       });
-    });

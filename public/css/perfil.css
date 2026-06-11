@@ -128,3 +128,48 @@
     text-align: center;
     padding: 40px 0;
 }
+
+/* MOSTRAMOS LOS SEGUIDORES Y SEGUIDOS */
+
+.relaciones-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.relaciones-title {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #2d3748;
+    transition: background 0.2s;
+    border-radius: 8px;
+}
+
+.user-item:hover {
+    background: #1a1d24;
+}
+
+.pfp-mini {
+    width: 40px;
+    height: 40px;
+    background: #8c5cf1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    color: white;
+    font-weight: bold;
+}
+
+.username-link {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+}

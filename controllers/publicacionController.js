@@ -50,7 +50,7 @@ export const getUnaPublicacion = async (req, res, next) => {
             });
         }
 
-        
+
         let miVoto = 0;
         if (idUsuarioAutenticado) {
             const valoracionExistente = await Valoracion.findOne({
@@ -254,7 +254,7 @@ export const valorarPublicacion = async (req, res, next) => {
         }
 
         if (publicacion.id_usuario === idUsuarioAutenticado) {
-            return res.send(`<script>alert("No podés votar tus propias publicaciones."); window.history.back();</script>`);
+            return res.status(403).json({ error: "No podés votar tus propias publicaciones." });
         }
 
         const yaVoto = await Valoracion.findOne({
