@@ -48,10 +48,10 @@ block content
                   else
                     | @fotografo
                 
-                if foto.etiquetas
-                    div.photo-meta-row
-                      each tag in foto.etiquetas.split(',')
-                        span.tag-badge ##{tag.trim()}
+                div.photo-meta-row
+                  each tag in foto.etiquetasArray
+                      a.tag-link(href=`/buscar?q=${encodeURIComponent(tag)}`)
+                          span.tag-badge ##{tag}
 
                 div.photo-card-footer            
                   div.photo-stat-rating

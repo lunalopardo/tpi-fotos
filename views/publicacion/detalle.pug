@@ -36,10 +36,10 @@ block content
         p.detail-description
           | #{foto.descripcion || 'Sin descripción disponible.'}
 
-        div.detail-tags-row
-          if foto.etiquetas
-            each tag in foto.etiquetas.split(',')
-              span.tag-badge ##{tag.trim()}
+        div.photo-meta-row
+          each tag in etiquetas
+              a.tag-link(href=`/publicacion/buscar?q=${encodeURIComponent(tag)}`)
+                span.tag-badge ##{tag}
 
         div.copyright-badge-wrapper(style="margin-top: 15px; font-size: 13px; font-weight: 600;")
           if foto.copyright === 1

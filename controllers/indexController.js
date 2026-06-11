@@ -8,7 +8,6 @@ export const renderHome = async (req, res, next) => {
     try {
         const estaLogueado = req.session && req.session.usuario;
         const condicionesFiltro = { estado: 'activa' };
-        
         const orden = req.query.orden || 'reciente';
 
         if (!estaLogueado) {
@@ -27,12 +26,12 @@ export const renderHome = async (req, res, next) => {
                 {
                     model: Usuario,
                     // traemos el id_usuario para poder armar el link del perfil
-                    attributes: ['id_usuario', 'nombre_usuario'] 
+                    attributes: ['id_usuario', 'nombre_usuario']
                 }
             ]
         });
 
-const promediosDB = await Valoracion.findAll({
+        const promediosDB = await Valoracion.findAll({
             attributes: [
                 'id_publicacion',
                 [Sequelize.fn('AVG', Sequelize.col('puntuacion')), 'promedioTotal'],
@@ -55,13 +54,17 @@ const promediosDB = await Valoracion.findAll({
 
             fotoPlana.imagenes = obtenerArrayImagenes(fotoPlana.rutas_archivos, idDeLaPub);
 
+            fotoPlana.etiquetasArray = fotoPlana.etiquetas
+                ? fotoPlana.etiquetas.split(',').map(e => e.trim())
+                : [];
+
             const datosValoracion = mapaPromedios[idDeLaPub] || { promedio: 0, cantidad: 0 };
             const promedioCrudo = datosValoracion.promedio;
-            
+
             fotoPlana.promedioFormateado = promedioCrudo ? Number(promedioCrudo).toFixed(1) : '0.0';
             fotoPlana.cantidadVotos = datosValoracion.cantidad;
             // Guardamos como número para el filtro JS
-            fotoPlana.promedioNumerico = promedioCrudo ? Number(promedioCrudo) : 0.0; 
+            fotoPlana.promedioNumerico = promedioCrudo ? Number(promedioCrudo) : 0.0;
 
             return fotoPlana;
         });

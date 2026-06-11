@@ -7,7 +7,7 @@ import { getAuthenticatedUserId } from '../helpers/auth.js';
 
 export const realizarBusqueda = async (req, res, next) => {
     try {
-        const termino = req.query.busqueda;
+        const termino = req.query.busqueda || req.query.q;
         const orden = req.query.orden || 'reciente';
         const idUsuarioAutenticado = getAuthenticatedUserId(req);
 
@@ -53,10 +53,14 @@ export const realizarBusqueda = async (req, res, next) => {
             })
             .map(pub => {
                 const fotoPlana = pub.get({ plain: true });
-                
+
                 const idDeLaPub = fotoPlana.id_publicacion || fotoPlana.id;
 
                 fotoPlana.imagenes = obtenerArrayImagenes(fotoPlana.rutas_archivos, idDeLaPub);
+
+                fotoPlana.etiquetasArray = fotoPlana.etiquetas
+                    ? fotoPlana.etiquetas.split(',').map(e => e.trim())
+                    : [];
 
                 const promedioCrudo = mapaPromedios[idDeLaPub];
                 fotoPlana.promedioFormateado = promedioCrudo ? Number(promedioCrudo).toFixed(1) : '0.0';

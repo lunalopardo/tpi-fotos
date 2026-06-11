@@ -40,7 +40,9 @@ export const getUnaPublicacion = async (req, res, next) => {
         });
 
         if (!publicacionBD) {
-            return res.status(404).send('Publicación no encontrada');
+            const error = new Error('La publicación que buscas no existe.');
+            error.status = 404;
+            return next(error);
         }
 
         const idUsuarioAutenticado = getAuthenticatedUserId(req);
@@ -76,12 +78,15 @@ export const getUnaPublicacion = async (req, res, next) => {
         fotoPlana.cantidadVotos = promedioData ? promedioData.get('cantidadVotos') : 0;
         fotoPlana.miVoto = miVoto;
 
+        const etiquetasArray = fotoPlana.etiquetas ? fotoPlana.etiquetas.split(',').map(e => e.trim()) : [];
+
         res.render('publicacion/detalle', {
             titulo: fotoPlana.titulo,
             foto: fotoPlana,
+            etiquetas: etiquetasArray,
             usuarioSesion: req.session ? req.session.usuario : null,
         });
-        
+
     } catch (error) {
         next(error);
     }
@@ -110,8 +115,15 @@ export const postNuevaPublicacion = async (req, res, next) => {
             formValues: req.body
         });
     }
-
+    
     const { titulo, descripcion, copyright, etiquetas, imagenesBase64, marca_agua_texto, permitir_comentarios } = validacion.data;
+    
+    const etiquetasProcesadas = etiquetas
+        ? etiquetas.split(',')
+            .map(e => e.trim())
+            .filter(e => e !== '') // Eliminar elementos vacíos porque se guardaban etiquetas vacías.
+            .join(', ')
+        : '';
 
     try {
         const comentarios_cerrados = permitir_comentarios === 'on' ? 0 : 1;
@@ -160,7 +172,7 @@ export const postNuevaPublicacion = async (req, res, next) => {
             copyright,
             marca_agua_texto: textoMarcaAgua,
             comentarios_cerrados,
-            etiquetas,
+            etiquetas: etiquetasProcesadas,
             rutas_archivos: textoImagenesJuntas,
             estado: 'activa',
             id_usuario: idUsuarioAutenticado,
@@ -207,13 +219,15 @@ export const getImagenIndividual = async (req, res, next) => {
 };
 
 // EDITAR PUBLICACIÓN
-export const getEditarPublicacion = async (req, res) => {
+export const getEditarPublicacion = async (req, res, next) => {
     try {
         const publicacion = await Publicacion.findByPk(req.params.id);
         const idUsuarioAutenticado = getAuthenticatedUserId(req);
 
         if (publicacion.id_usuario !== idUsuarioAutenticado) {
-            return res.status(403).send("No tienes permiso para editar esta publicación.");
+            const error = new Error('No tienes permiso para realizar esta acción.');
+            error.status = 403;
+            return next(error);
         }
 
         res.render('publicacion/editar', { publicacion });
@@ -222,19 +236,29 @@ export const getEditarPublicacion = async (req, res) => {
     }
 };
 
-export const editarPublicacion = async (req, res) => {
-    const { titulo, descripcion, copyright, marca_agua_texto, permitir_comentarios } = req.body;
-    
+export const editarPublicacion = async (req, res, next) => {
+    const { titulo, descripcion, etiquetas, permitir_comentarios } = req.body;
+
+    const etiquetasProcesadas = etiquetas
+        ? etiquetas.split(',')
+            .map(e => e.trim())
+            .filter(e => e !== '') // Eliminar elementos vacíos
+            .join(', ')
+        : '';
+
     const publicacion = await Publicacion.findByPk(req.params.id);
     if (publicacion.id_usuario !== getAuthenticatedUserId(req)) {
-        return res.status(403).send("No tenés permiso o la publicación no existe.");
+        const error = new Error('No tienes permiso para realizar esta acción.');
+        error.status = 403;
+        return next(error);
     }
 
-    const comentarios_cerrados = permitir_comentarios === 'on' ? 0 : 1; 
+    const comentarios_cerrados = permitir_comentarios === 'on' ? 0 : 1;
 
     await publicacion.update({
         titulo,
         descripcion,
+        etiquetas: etiquetasProcesadas,
         comentarios_cerrados
     });
 
@@ -281,7 +305,7 @@ export const valorarPublicacion = async (req, res, next) => {
 
         const idUsuarioAutenticado = getAuthenticatedUserId(req);
         if (!idUsuarioAutenticado) {
-            return res.send(`<script>alert("Debe iniciar sesión primero para poder valorar."); window.history.back();</script>`);
+            return res.status(403).json({ error: "Iniciá sesión para votar." });
         }
 
         const publicacion = await Publicacion.findByPk(id_publicacion);

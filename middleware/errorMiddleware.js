@@ -1,8 +1,10 @@
 export const manejadorErroresGlobal = (err, req, res, next) => {
-    console.error('Error: ', err.stack || err.message || err);
+    const statusCode = err.status || 500;
+    
+    const mensajeError = err.message || 'Ups! Algo salió mal.';
 
-    res.status(500).render('error', {
-        titulo: 'Error en el servidor',
-        mensaje: 'Ups! Algo salió mal de nuestro lado. Volvé a intentarlo más tarde.'
+    res.status(statusCode).render('error', {
+        titulo: `Error ${statusCode}`,
+        mensaje: mensajeError
     });
 };

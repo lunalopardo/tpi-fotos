@@ -21,7 +21,14 @@ block content
             div.form-group
                 label.form-label Descripción (Opcional)
                 textarea.form-input(name="descripcion" rows="3")= publicacion.descripcion
-
+            div.form-group
+                label.form-label Etiquetas (Separadas por comas)
+                input.form-input(
+                    type="text" 
+                    name="etiquetas" 
+                    value=publicacion.etiquetas 
+                    placeholder="Ej: paisajes, naturaleza, argentina"
+                )
             div.form-group.checkbox-group
                 //- Permitir comentarios es el checkbox pero en la BD lo tengo como comentarios_cerrados, así que se guarda el opuesto
                 input#permitir_comentarios(type="checkbox" name="permitir_comentarios" checked=(publicacion.comentarios_cerrados === 0))
