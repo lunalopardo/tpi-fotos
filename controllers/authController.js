@@ -12,9 +12,12 @@ const loginSchema = z.object({
 const registroSchema = z.object({
     nombre_usuario: z.string().min(3, 'El usuario debe tener al menos 3 caracteres').trim(),
     email: z.string().email('Email inválido').trim(),
-    contrasenia: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres').trim()
-})
-
+    contrasenia: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres').trim(),
+    confirmar_contrasenia: z.string('La confirmación es obligatoria').trim()
+}).refine((data) => data.contrasenia === data.confirmar_contrasenia, {
+    message: "Las contraseñas no coinciden",
+    path: ["confirmar_contrasenia"],
+});
 
 // GET - Mostrar login
 export const getLogin = (req, res) => {
@@ -75,8 +78,10 @@ export const postRegistro = async (req, res, next) => {
     const validacion = registroSchema.safeParse(req.body);
 
     if (!validacion.success) {
+        const errorMessage = validacion.error.issues[0].message;
         return res.status(400).render('auth/registro', {
-            error: validacion.error.issues[0].message, formValues: req.body
+            error: errorMessage,
+            formValues: req.body
         });
     }
 
