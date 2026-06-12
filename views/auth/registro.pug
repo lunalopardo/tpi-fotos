@@ -39,12 +39,11 @@ html(lang="es")
         
         div.form-group
           label.form-label Contraseña
-          input.form-input(
-            type="password" 
-            name="contrasenia" 
-            required 
-            placeholder="••••••••"
-          )
+          input.form-input(type="password" name="contrasenia" required placeholder="••••••••")
+
+        div.form-group
+          label.form-label Confirmar Contraseña
+          input.form-input(type="password" name="confirmar_contrasenia" required placeholder="••••••••")
 
         button.btn-auth-submit(type="submit") Registrarme
 

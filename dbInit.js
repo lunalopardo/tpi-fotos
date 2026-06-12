@@ -4,20 +4,28 @@ import { asociarClases } from './models/asociaciones.js';
 import { encriptarContrasenia } from './helpers/hash.js';
 
 const usersToCreate = [
+    // Usuarios de prueba
+    { nombre_usuario: 'prueba', email: 'prueba@gmail.com' },
+    { nombre_usuario: 'admin', email: 'admin@gmail.com' },
+
+    // Grupo para probar búsquedas similares
+    { nombre_usuario: 'JuanPerez', email: 'juan.p@gmail.com' },
+    { nombre_usuario: 'Juancito_', email: 'juancito@gmail.com' },
+    { nombre_usuario: 'JuanMaster', email: 'masterjuan@gmail.com' },
+
+    // Usuarios adicionales
     { nombre_usuario: 'Thrall', email: 'warchief@gmail.com' },
     { nombre_usuario: 'Cairne', email: 'bloodhoof@gmail.com' },
     { nombre_usuario: 'Voljin', email: 'shadowhunter@gmail.com' },
     { nombre_usuario: 'Varok', email: 'saurfang@gmail.com' },
-    { nombre_usuario: 'GrandApothecary', email: 'putress@gmail.com' },
     { nombre_usuario: 'BobTheUndead', email: 'bob@gmail.com' },
-    { nombre_usuario: 'ZugZug99', email: 'peon@gmail.com' },
-    { nombre_usuario: 'admin', email: 'admin@gmail.com' }
+    { nombre_usuario: 'ZugZug99', email: 'peon@gmail.com' }
 ];
 
 async function inicializarBaseDeDatos() {
     try {
         await sequelize.authenticate();
-        asociarClases(); 
+        asociarClases();
         // force: true borra las tablas existentes y las crea desde cero
         await sequelize.sync({ force: true });
 
