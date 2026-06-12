@@ -29,7 +29,7 @@ block content
           
 
         //- Filtro de seguridad para el botón Seguir
-        if session && session.usuario && perfilUsuario && session.usuario.id !== perfilUsuario.id_usuario
+        if session && session.usuario && perfilUsuario && session.usuario.id_usuario !== perfilUsuario.id_usuario
           form.profile-actions-form(action=`/usuario/seguir/${perfilUsuario.id_usuario}` method="POST")
             if yaLoSigue
               button.btn-unfollow(type="submit") Dejar de seguir
